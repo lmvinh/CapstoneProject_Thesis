@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import TopBar from "./scenes/global/TopBar"; 
-import { Sidebar } from "react-pro-sidebar";
-import Dashboard from "./scenes/dashboard";
+import Topbar from "./scenes/global/TopBar";
+import Sidebar from "./scenes/global/SideBar";
+import Dashboard from "./scenes/dashboard/index";
 // import Team from "./scenes/team";
 // import Invoices from "./scenes/invoices";
 // import Contacts from "./scenes/contacts";
@@ -27,7 +27,7 @@ function App() {
         <div className="app">
           <Sidebar isSidebar={isSidebar} />
           <main className="content">
-            <TopBar setIsSidebar={setIsSidebar} />
+            <Topbar SidebarsetIsSidebar={setIsSidebar} />
             <Routes>
               <Route path="/" element={<Dashboard />} />
               {/* <Route path="/team" element={<Team />} />

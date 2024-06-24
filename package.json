@@ -17,6 +17,7 @@
     "@nivo/geo": "^0.87.0",
     "@nivo/line": "^0.87.0",
     "@nivo/pie": "^0.87.0",
+    "@randumbwilliam/react-pro-sidebar": "^0.7.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -26,7 +27,7 @@
     "react-dom": "^18.3.1",
     "react-pro-sidebar": "^1.1.0",
     "react-router-dom": "^6.23.1",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4",
     "yup": "^1.4.0"
   },
