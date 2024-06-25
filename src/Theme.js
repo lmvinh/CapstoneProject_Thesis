@@ -140,6 +140,9 @@ export const themeSettings = (mode) => {
               main: colors.grey[500],
               light: colors.grey[100],
             },
+            switch: {
+              main: colors.greenAccent[500],
+            },
             background: {
               default: colors.primary[500],
             },
@@ -156,6 +159,9 @@ export const themeSettings = (mode) => {
               dark: colors.grey[700],
               main: colors.grey[500],
               light: colors.grey[100],
+            },
+            switch: {
+              main: colors.blueAccent[500],
             },
             background: {
               default: "#fcfcfc",
