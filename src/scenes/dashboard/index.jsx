@@ -18,7 +18,7 @@ const DashBoard = () => {
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Header title="DASHBOARD" subtitle="Welcome to our dashboard" />
     
-            <Box>v 
+            <Box>
               <Button
                 sx={{
                   backgroundColor: colors.blueAccent[700],
