@@ -9,6 +9,7 @@ import TungstenIcon from '@mui/icons-material/Tungsten';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import CloudIcon from '@mui/icons-material/Cloud';
+import ReviewsBar from "../../components/GaugeChart";
 const DashBoard = () => {
     const theme = useTheme();
     const colors =tokens(theme.palette.mode);
@@ -142,8 +143,76 @@ const DashBoard = () => {
                     <LineChart isDashboard = "true"></LineChart>
                 </Box>
             </Box>
-            </Box>
-            </Box>
+                  {/* ROW 3 */}
+
+                  <Box
+          gridColumn="span 4"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          p="30px"
+        >
+          <Typography variant="h5" fontWeight="600">
+            Campaign
+          </Typography>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            mt="25px"
+            style={{ width: 250, height: 200 }}
+
+          >
+            <ReviewsBar  />
+            <Typography
+              variant="h5"
+              color={colors.greenAccent[500]}
+              sx={{ mt: "15px" }}
+            >
+              $48,352 revenue generated
+            </Typography>
+            <Typography>Includes extra misc expenditures and costs</Typography>
+          </Box>
+        </Box>
+        <Box
+          gridColumn="span 4"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          padding="30px"
+          
+        >
+          <Typography
+            variant="h5"
+            fontWeight="600"
+            sx={{ marginBottom: "15px" }}
+          >
+           Current Temperature
+           </Typography>
+          <Box height="200px"              
+           style={{ width: 250, height: 200 }}>
+            <ReviewsBar isDashboard={true}  score={33}/>
+          </Box>
+        </Box>
+        <Box
+          gridColumn="span 4"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          padding="30px"
+          
+        >
+          <Typography
+            variant="h5"
+            fontWeight="600"
+            sx={{ marginBottom: "15px" }}
+          >
+           Current Humidity
+          </Typography>
+          <Box height="200px"              
+           style={{ width: 250, height: 200 }}>
+            <ReviewsBar isDashboard={true} score={20} />
+          </Box>
+        </Box>
+        </Box>
+        </Box>
             )
 }
 export default DashBoard;
