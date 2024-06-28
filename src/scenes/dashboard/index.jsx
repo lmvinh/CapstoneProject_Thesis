@@ -2,6 +2,7 @@ import { Box,Button,IconButton,Typography,useTheme } from "@mui/material";
 import Header from "../../components/header";
 import SwitchRelay from "../../components/SwitchRelay";
 import StatBox from "../../components/StatBox";
+import LineChart from "../../components/LineChart";
 import { tokens } from "../../Theme";
 import CurtainsIcon from '@mui/icons-material/Curtains';
 import TungstenIcon from '@mui/icons-material/Tungsten';
@@ -117,7 +118,32 @@ const DashBoard = () => {
                   />
                 }
               />
-            </Box></Box></Box>
+            </Box>
+            {/* ROW 2 */}
+            <Box 
+            gridColumn=" span 8"
+            gridRow = "span 2"
+            backgroundColor = {colors.primary[400]}
+            >
+            <Box
+            mt = "25px"
+            p = "0 30px"
+            dislay = "flex"
+            justifyContent= "space-center"
+            alignItems="center"
+            >
+                <Box
+                >
+                    <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>Data sensor generate</Typography>
+                </Box>
+               
+            </Box>
+                <Box height="250px" ml ="-20px"> 
+                    <LineChart isDashboard = "true"></LineChart>
+                </Box>
+            </Box>
+            </Box>
+            </Box>
             )
 }
 export default DashBoard;
