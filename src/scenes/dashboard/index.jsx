@@ -53,7 +53,7 @@ const DashBoard = () => {
             >
               <StatBox
                 title="Relay 1"
-                subtitle="Relay 2"
+                subtitle="Relay 1"
                 progress="0.75"
                 increase="+14%"
                 icon={
@@ -72,7 +72,7 @@ const DashBoard = () => {
             >
               <StatBox
                 title="Relay 2"
-                subtitle="Sales Obtained"
+                subtitle="Relay 2"
                 progress="0.50"
                 increase="+21%"
                 icon={
@@ -91,7 +91,7 @@ const DashBoard = () => {
             >
               <StatBox
                 title="Relay 3"
-                subtitle="New Clients"
+                subtitle="Relay 3"
                 progress="0.30"
                 increase="+5%"
                 icon={
@@ -110,7 +110,7 @@ const DashBoard = () => {
             >
               <StatBox
                 title="Relay 4"
-                subtitle="Traffic Received"
+                subtitle="Relay 4"
                 progress="0.80"
                 increase="+43%"
                 icon={
