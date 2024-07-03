@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "@randumbwilliam/react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import "@randumbwilliam/react-pro-sidebar/dist/css/styles.css"
+import "@randumbwilliam/react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../Theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
