@@ -27,9 +27,12 @@
     "formik": "^2.4.6",
     "fullcalendar": "^6.1.14",
     "mongodb": "^6.8.0",
+<<<<<<< HEAD
     "mongoose": "^8.4.4",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.4",
+=======
+>>>>>>> a88a0c74a3a04d0e1fd9828623bb1a21694c6127
     "react": "^18.3.1",
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18.3.1",
