@@ -10,6 +10,7 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import CloudIcon from "@mui/icons-material/Cloud";
 import ReviewsBar from "../../components/GaugeChart";
+import client from "../../controllers/mqttAPI";
 const DashBoard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);

@@ -12,8 +12,6 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
-      <TempData />
-
     </BrowserRouter>
   </React.StrictMode>
 );
