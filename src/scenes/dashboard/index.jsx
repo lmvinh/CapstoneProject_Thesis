@@ -54,9 +54,9 @@ const DashBoard = () => {
         >
           <StatBox
             title="Relay 1"
-            subtitle="Relay 1"
-            progress="0.75"
-            increase="+14%"
+            subtitle="Status"
+            status="OFF"
+            relay="relay1"
             icon={
               <CurtainsIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -76,6 +76,7 @@ const DashBoard = () => {
             subtitle="Relay 2"
             progress="0.50"
             increase="+21%"
+            relay="relay2"
             icon={
               <CurtainsIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -95,6 +96,7 @@ const DashBoard = () => {
             subtitle="Relay 3"
             progress="0.30"
             increase="+5%"
+            relay="relay3"
             icon={
               <CurtainsIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -114,6 +116,7 @@ const DashBoard = () => {
             subtitle="Relay 4"
             progress="0.80"
             increase="+43%"
+            relay="relay4"
             icon={
               <CurtainsIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

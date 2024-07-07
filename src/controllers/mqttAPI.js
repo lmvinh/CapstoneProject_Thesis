@@ -1,40 +1,73 @@
-import mqtt from 'mqtt';
+
+import mqtt from "mqtt";
+
+const MAIN_TOPIC = "/innovation/airmonitoring/WSNs/ABC/";
 
 
-const MQTT_SERVER = "mqtt://mqttserver.tk";
-const MQTT_PORT = 9001;
-const MQTT_USERNAME = "innovation";
-const MQTT_PASSWORD = "Innovation_RgPQAZoA5N";
-const MQTT_TOPIC_SUBSCRIBE = "/innovation/airmonitoring/WSNs/ABC";
+class MQTTHelper {
+    constructor() {
+        this.MQTT_SERVER = "mqtt://mqttserver.tk";
+        this.MQTT_PORT = 9001;
+        this.MQTT_USERNAME = "innovation";
+        this.MQTT_PASSWORD = "Innovation_RgPQAZoA5N";
 
-// Create MQTT client instance
-const client = mqtt.connect(MQTT_SERVER, {
-    port: MQTT_PORT,
-    username: MQTT_USERNAME,
-    password: MQTT_PASSWORD
-});
+        this.MQTT_TOPIC_SUB_AIR = MAIN_TOPIC ;
+        
+        this.recvCallBack = null;
 
-// Handle MQTT events
-client.on('connect', function () {
-    console.log('Connected to MQTT server');
-    client.subscribe(MQTT_TOPIC_SUBSCRIBE, function (err) {
-        if (!err) {
-            console.log('Subscribed to topic:', MQTT_TOPIC_SUBSCRIBE);
+        // Create MQTT client
+        this.mqttClient = mqtt.connect(this.MQTT_SERVER, {
+            port: this.MQTT_PORT,
+            username: this.MQTT_USERNAME,
+            password: this.MQTT_PASSWORD
+        });
+
+        // Register MQTT events
+        this.mqttClient.on('connect', this.mqtt_connected.bind(this));
+        this.mqttClient.on('message', this.mqtt_recv_message.bind(this));
+        this.mqttClient.on('subscribe', this.mqtt_subscribed.bind(this));
+    }
+
+    mqtt_connected() {
+        console.log("Connected successfully!!");
+        this.mqttClient.subscribe(this.MQTT_TOPIC_SUB_AIR, (err) => {
+            if (!err) {
+                console.log("Subscribed to Topic!!!");
+            } else {
+                console.log("Subscription error:", err);
+            }
+        });
+    }
+
+    mqtt_subscribed() {
+        console.log("Subscribed to Topic!!!");
+    }
+
+    mqtt_recv_message(topic, message) {
+        console.log("Received:", message.toString());
+        if (this.recvCallBack) {
+            this.recvCallBack(message.toString());
         }
-    });
-});
+    }
 
-client.on('message', function (topic, message) {
-    console.log('Received message:', message.toString());
-});
+    setRecvCallBack(func) {
+        this.recvCallBack = func;
+    }
 
-client.on('error', function (error) {
-    console.error('Error:', error);
-});
+    publish(topic, message) {
+        this.mqttClient.publish(topic, String(message), { retain: true });
+    }
+}
 
-// Publish example message
-client.publish(MQTT_TOPIC_SUBSCRIBE, '1');
+// Example usage
+function exampleCallback(message) {
+    console.log("Callback received message:", message);
+}
 
-// Optionally disconnect MQTT client
-// client.end();
-export default client
+// Initialize the MQTT helper
+const mqttHelper = new MQTTHelper();
+
+// Set the receive callback
+mqttHelper.setRecvCallBack(exampleCallback);
+// Publish a message to a specific topic
+export default MQTTHelper;
