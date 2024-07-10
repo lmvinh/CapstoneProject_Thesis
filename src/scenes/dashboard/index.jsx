@@ -1,19 +1,50 @@
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import Header from "../../components/header";
-import SwitchRelay from "../../components/SwitchRelay";
 import StatBox from "../../components/StatBox";
+import StatBoxWithGauge from "../../components/StatBoxWithGauge";
 import LineChart from "../../components/LineChart";
 import { tokens } from "../../Theme";
 import CurtainsIcon from "@mui/icons-material/Curtains";
-import TungstenIcon from "@mui/icons-material/Tungsten";
-import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
-import CloudIcon from "@mui/icons-material/Cloud";
+import MQTTHelper from "../../controllers/mqttAPI";
 import ReviewsBar from "../../components/GaugeChart";
-import client from "../../controllers/mqttAPI";
+
 const DashBoard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const [tempData, setTempData] = useState(0);
+  const [humiData, setHumiData] = useState(0);
+  const [airData, setAirData] = useState(0);
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const response = await fetch("../../controllers/dataEnv.json");
+        const data = await response.json();
+        setTempData(data.temp);
+        setHumiData(data.humi);
+        setAirData(data.air);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      }
+    };
+
+    fetchInitialData();
+
+    const mqttHelper = new MQTTHelper();
+
+    mqttHelper.setRecvCallBack((message) => {
+      const data = JSON.parse(message);
+      setTempData(data.temp);
+      setHumiData(data.humi);
+      setAirData(data.air);
+    });
+
+    return () => {
+      mqttHelper.mqttClient.end();
+    };
+  }, []);
 
   return (
     <Box m="20px">
@@ -32,7 +63,7 @@ const DashBoard = () => {
             }}
           >
             <CurtainsIcon sx={{ mr: "10px" }} />
-            Current Temp/Humi
+            Current Temp/Humi/Air
           </Button>
         </Box>
       </Box>
@@ -44,7 +75,7 @@ const DashBoard = () => {
         gridAutoRows="140px"
         gap="20px"
       >
-        {/* ROW 1 */}
+        {/* ROW 1 - StatBoxes for Relays */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -74,8 +105,7 @@ const DashBoard = () => {
           <StatBox
             title="Relay 2"
             subtitle="Relay 2"
-            progress="0.50"
-            increase="+21%"
+            status="OFF"
             relay="relay2"
             icon={
               <CurtainsIcon
@@ -94,8 +124,7 @@ const DashBoard = () => {
           <StatBox
             title="Relay 3"
             subtitle="Relay 3"
-            progress="0.30"
-            increase="+5%"
+            status="OFF"
             relay="relay3"
             icon={
               <CurtainsIcon
@@ -114,8 +143,7 @@ const DashBoard = () => {
           <StatBox
             title="Relay 4"
             subtitle="Relay 4"
-            progress="0.80"
-            increase="+43%"
+            status="OFF"
             relay="relay4"
             icon={
               <CurtainsIcon
@@ -124,17 +152,18 @@ const DashBoard = () => {
             }
           />
         </Box>
-        {/* ROW 2 */}
+
+        {/* ROW 2 - LineChart */}
         <Box
-          gridColumn=" span 8"
+          gridColumn="span 8"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
         >
           <Box
             mt="25px"
             p="0 30px"
-            dislay="flex"
-            justifyContent="space-center"
+            display="flex"
+            justifyContent="center"
             alignItems="center"
           >
             <Box>
@@ -148,74 +177,94 @@ const DashBoard = () => {
             </Box>
           </Box>
           <Box height="250px" ml="-20px">
-            <LineChart isDashboard="true"></LineChart>
+            <LineChart isDashboard="true" />
           </Box>
         </Box>
-        {/* ROW 3 */}
+
+        {/* ROW 3 - Campaign Statistics */}
+        <Box
+          gridColumn="span 4"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          p="30px"
+        >
+          <Typography variant="h5" fontWeight="600" sx={{ mb: "15px" }}>
+            Campaign
+          </Typography>
+          <Box style={{ width: "100%", height: "100%" }}>
+            <ReviewsBar displayType="temp" />
+          </Box>
+          <Typography
+            variant="h5"
+            color={colors.greenAccent[500]}
+            sx={{ mt: "15px" }}
+          >
+            $48,352 revenue generated
+          </Typography>
+          <Typography>Includes extra misc expenditures and costs</Typography>
+        </Box>
+
+        {/* ROW 4 - Temperature, Humidity, Air */}
+        <Box
+          gridColumn="span 4"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          p="30px"
+        >
+          <StatBoxWithGauge
+            title="Temperature"
+            subtitle="Room Temp"
+            score={tempData}
+            displayType="temp"
+          />
+        </Box>
 
         <Box
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
           p="30px"
         >
-          <Typography variant="h5" fontWeight="600">
-            Campaign
-          </Typography>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            mt="25px"
-            style={{ width: 250, height: 200 }}
-          >
-            <ReviewsBar />
-            <Typography
-              variant="h5"
-              color={colors.greenAccent[500]}
-              sx={{ mt: "15px" }}
-            >
-              $48,352 revenue generated
-            </Typography>
-            <Typography>Includes extra misc expenditures and costs</Typography>
-          </Box>
+          <StatBoxWithGauge
+            title="Humidity"
+            subtitle="Room Humidity"
+            score={humiData}
+            displayType="humi"
+          />
         </Box>
+
         <Box
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
-          padding="30px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          p="30px"
         >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ marginBottom: "15px" }}
-          >
-            Current Temperature
-          </Typography>
-          <Box height="200px" style={{ width: 250, height: 200 }}>
-            <ReviewsBar isDashboard={true} score={33} />
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          padding="30px"
-        >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ marginBottom: "15px" }}
-          >
-            Current Humidity
-          </Typography>
-          <Box height="200px" style={{ width: 250, height: 200 }}>
-            <ReviewsBar isDashboard={true} score={20} />
-          </Box>
+          <StatBoxWithGauge
+            title="Air Quality"
+            subtitle="Room Air Quality"
+            score={airData}
+            displayType="air"
+          />
         </Box>
       </Box>
     </Box>
   );
 };
+
 export default DashBoard;

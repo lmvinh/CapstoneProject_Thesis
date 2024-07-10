@@ -83,7 +83,6 @@ const SwitchRelay = ({ size = "40", relay }) => {
         relayStatus[relay] = status;
 
         // Upload updated relayStatus.json file
-        uploadRelayStatusJson();
       })
       .catch((error) => {
         console.error("Error updating relay status:", error);
@@ -121,24 +120,6 @@ const SwitchRelay = ({ size = "40", relay }) => {
     } catch (error) {
       console.error("Error handling MQTT message:", error);
     }
-  };
-
-  const uploadRelayStatusJson = () => {
-    // Assuming relayStatus is updated locally, upload it to the server
-    fetch("http://localhost:8000/upload-relay-status", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(relayStatus),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Relay status JSON uploaded successfully:", data);
-      })
-      .catch((error) => {
-        console.error("Error uploading relay status JSON:", error);
-      });
   };
 
   return (

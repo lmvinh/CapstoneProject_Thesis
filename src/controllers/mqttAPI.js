@@ -1,6 +1,5 @@
 
 import mqtt from "mqtt";
-
 const MAIN_TOPIC = "/innovation/airmonitoring/WSNs/ABC/";
 
 
@@ -60,14 +59,14 @@ class MQTTHelper {
 }
 
 // Example usage
-function exampleCallback(message) {
-    console.log("Callback received message:", message);
-}
+// function exampleCallback(message) {
+//     console.log("Callback received message:", message);
+// }
 
-// Initialize the MQTT helper
-const mqttHelper = new MQTTHelper();
+// // Initialize the MQTT helper
+// const mqttHelper = new MQTTHelper();
 
-// Set the receive callback
-mqttHelper.setRecvCallBack(exampleCallback);
+// // Set the receive callback
+// mqttHelper.setRecvCallBack(exampleCallback);
 // Publish a message to a specific topic
 export default MQTTHelper;

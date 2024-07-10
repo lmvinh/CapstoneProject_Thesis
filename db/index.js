@@ -44,30 +44,31 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   });
 
 // Define the schema for the temperature data using Mongoose
-const TempSchema = new mongoose.Schema({
+const ENvSchema = new mongoose.Schema({
   date: String,
-  value: Number,
+  valueTemp: Number,
+  valueHumi: Number
 });
 
 // Create a Mongoose model called "TempModel" based on the TempSchema
-const TempModel = mongoose.model("temps", TempSchema);
+const TempModel = mongoose.model("envs", ENvSchema);
 
 // Function to write data to temp.js
 const writeTempDataToFile = async () => {
   try {
     const tempData = await TempModel.find();
-    const jsModule = `export const tempData = ${JSON.stringify(tempData, null, 2)};`;
-    fs.writeFileSync(path.join(__dirname, '../src/data/temp.js'), jsModule);
+    const jsModule = `export const Data = ${JSON.stringify(tempData, null, 2)};`;
+    fs.writeFileSync(path.join(__dirname, '../src/data/env.js'), jsModule);
   } catch (error) {
     console.error("Error writing to temp.js:", error);
   }
 };
 
 // Route to handle GET requests to "/getTemp"
-app.get("/getTemp", async (req, res) => {
+app.get("/getENVdata", async (req, res) => {
   try {
-    const tempData = await TempModel.find();
-    res.json(tempData);
+    const Data = await TempModel.find();
+    res.json(Data);
     
     // Write the data to temp.js
     await writeTempDataToFile();
@@ -76,8 +77,18 @@ app.get("/getTemp", async (req, res) => {
   }
 });
 
+
+app.post('/getENVdata', (req, res) => {
+  const newData = req.body;
+  fs.writeFile(ENV_FILE_PATH, JSON.stringify(newData, null, 2), (err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to write file' });
+    }
+    res.json({ success: true });
+  });
+});
 // Route to handle POST requests to "/TempPost"
-app.post("/TempPost", async (req, res) => {
+app.post("/ENVPost", async (req, res) => {
   try {
     const newTemp = new TempModel(req.body);
     await newTemp.save();
@@ -93,6 +104,7 @@ app.post("/TempPost", async (req, res) => {
 
 // Define the file path for relay status JSON
 const relayStatusFilePath = path.join(__dirname, '../src/controllers/relayStatus.json');
+const envIVStatusFilePath = path.join(__dirname, '../src/controllers/envIVStatus.json');
 
 // Read the current relay statuses from the file
 const getRelayStatus = () => {
@@ -113,6 +125,16 @@ const setRelayStatus = (statuses) => {
     console.error("Error writing relay status:", error);
   }
 };
+// Read the current ENV-IV statuses from the file
+const getEnvIVStatus = () => {
+  try {
+    const data = fs.readFileSync(envIVStatusFilePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error("Error reading env status:", error);
+    return { temp: false, humi: false, date: false};
+  }
+};
 
 // Route to handle POST requests to update relay status
 app.post('/relay-status', (req, res) => {
@@ -130,9 +152,32 @@ app.post('/relay-status', (req, res) => {
   // Send response
   res.status(200).json({ message: 'Relay status updated', statuses });
 });
+app.post('/enviV', (req, res) => {
+  const data = req.body;
 
+  fs.writeFile(path.join(__dirname, '../src/controllers', 'dataEnv.json'), JSON.stringify(data, null, 2), (err) => {
+    if (err) {
+      return res.status(500).send('Error writing file');
+    }
+    res.send('Data saved successfully');
+  });
+});
+// Endpoint to serve dataEnv.json
+app.get('/enviV', (req, res) => {
+  fs.readFile(path.join(__dirname, '../src/controllers/dataEnv.json'), 'utf8', (err, data) => {
+    if (err) {
+      res.status(500).send('Error reading file');
+      return;
+    }
+    res.json(JSON.parse(data));
+  });
+});
 // Route to handle GET requests to fetch relay status
 app.get('/relay-status', (req, res) => {
   const statuses = getRelayStatus();
+  res.json(statuses);
+});
+app.get('/envIV-status', (req, res) => {
+  const statuses = getEnvIVStatus();
   res.json(statuses);
 });
