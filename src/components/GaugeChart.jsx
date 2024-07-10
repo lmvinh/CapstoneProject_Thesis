@@ -71,8 +71,8 @@ const ReviewsBar = ({ displayType }) => {
   };
 
   const responsiveStyle = {
-    width: { xs: "20px", sm: "30px", md: "40px", lg: "50px", xl: "150px" },
-    height: { xs: "20px", sm: "30px", md: "40px", lg: "50px", xl: "150px" },
+    width: { xs: "20px", sm: "75px", md: "100px", lg: "100px", xl: "150px" },
+    height: { xs: "20px", sm: "75px", md: "100px", lg: "100px", xl: "150px" },
   };
 
   let displayValue = tempData; // Default to tempData
