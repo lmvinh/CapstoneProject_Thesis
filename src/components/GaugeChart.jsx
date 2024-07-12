@@ -7,6 +7,7 @@ import "react-circular-progressbar/dist/styles.css";
 import { tokens } from "../Theme";
 import mqtt from "mqtt";
 import axios from "axios"; // Import axios for HTTP requests
+import debounce from "lodash.debounce";
 
 const MAIN_TOPIC = "/innovation/airmonitoring/WSNs/ABC/env";
 
@@ -24,25 +25,13 @@ const ReviewsBar = ({ displayType }) => {
       password: "Innovation_RgPQAZoA5N",
     });
 
-    mqttClient.on("connect", () => {
-      console.log("Connected successfully!!");
-      mqttClient.subscribe(MAIN_TOPIC, (err) => {
-        if (!err) {
-          console.log("Subscribed to Topic!!!");
-        } else {
-          console.log("Subscription error:", err);
-        }
-      });
-    });
-
-    mqttClient.on("message", (topic, message) => {
+    const handleMessage = debounce((topic, message) => {
       console.log("Received:", message.toString());
       const data = JSON.parse(message.toString());
       setTempData(data.temp);
       setHumiData(data.humi);
       setAirData(data.air);
 
-      // Send data to the server to save in the JSON file
       axios
         .post("http://localhost:8000/enviV", {
           temp: data.temp,
@@ -55,10 +44,24 @@ const ReviewsBar = ({ displayType }) => {
         .catch((error) => {
           console.error("Error saving data:", error);
         });
+    }, 1000); // Adjust debounce interval as needed
+
+    mqttClient.on("connect", () => {
+      console.log("Connected successfully!!");
+      mqttClient.subscribe(MAIN_TOPIC, (err) => {
+        if (!err) {
+          console.log("Subscribed to Topic!!!");
+        } else {
+          console.log("Subscription error:", err);
+        }
+      });
     });
+
+    mqttClient.on("message", handleMessage);
 
     return () => {
       mqttClient.end();
+      handleMessage.cancel();
     };
   }, []);
 
@@ -75,9 +78,8 @@ const ReviewsBar = ({ displayType }) => {
     height: { xs: "20px", sm: "75px", md: "100px", lg: "100px", xl: "150px" },
   };
 
-  let displayValue = tempData; // Default to tempData
+  let displayValue = tempData;
 
-  // Adjust displayValue based on displayType prop
   if (displayType === "humi") {
     displayValue = humiData;
   } else if (displayType === "air") {
@@ -98,10 +100,8 @@ const ReviewsBar = ({ displayType }) => {
             value={value}
             text={`${displayValue} ${displayType === "temp" ? "°C" : ""}${
               displayType === "humi" ? "%" : ""
-            }${displayType === "air" ? "" : ""}`} // Display temperature, humidity, or air
-            circleRatio={
-              0.7
-            } /* Make the circle only 0.7 of the full diameter */
+            }${displayType === "air" ? "" : ""}`}
+            circleRatio={0.7}
             styles={{
               trail: {
                 strokeLinecap: "butt",

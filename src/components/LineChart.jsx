@@ -1,11 +1,13 @@
+import React from "react";
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../Theme";
-import { mockLineData as data } from "../data/mockData";
+import { getChartData } from "./getChartData";
 
 const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const data = getChartData(); // Get the formatted data
 
   return (
     <ResponsiveLine
@@ -43,14 +45,14 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
           },
         },
       }}
-      colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
-      margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+      colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }}
+      margin={{ top: 50, right: 110, bottom: 80, left: 60 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
-        min: "auto",
-        max: "auto",
-        stacked: true,
+        min: 0, // Set the minimum value for y-axis
+        max: 100, // Set the maximum value for y-axis
+        stacked: false, // Do not stack the y-values
         reverse: false,
       }}
       yFormat=" >-.2f"
@@ -61,23 +63,23 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         orient: "bottom",
         tickSize: 0,
         tickPadding: 5,
-        tickRotation: 0,
-        legend: isDashboard ? undefined : "transportation", // added
+        tickRotation: 90, // Rotate the dates by 90 degrees
+        legend: isDashboard ? undefined : "Date", // updated legend
         legendOffset: 36,
         legendPosition: "middle",
       }}
       axisLeft={{
         orient: "left",
-        tickValues: 5, // added
+        tickValues: 5, // Number of ticks on the y-axis
         tickSize: 3,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "count", // added
+        legend: isDashboard ? undefined : "Value",
         legendOffset: -40,
         legendPosition: "middle",
       }}
       enableGridX={false}
-      enableGridY={false}
+      enableGridY={false} // Disable grid lines for the y-axis
       pointSize={8}
       pointColor={{ theme: "background" }}
       pointBorderWidth={2}

@@ -18,20 +18,6 @@ const DashBoard = () => {
   const [airData, setAirData] = useState(0);
 
   useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const response = await fetch("../../controllers/dataEnv.json");
-        const data = await response.json();
-        setTempData(data.temp);
-        setHumiData(data.humi);
-        setAirData(data.air);
-      } catch (error) {
-        console.error("Error fetching initial data:", error);
-      }
-    };
-
-    fetchInitialData();
-
     const mqttHelper = new MQTTHelper();
 
     mqttHelper.setRecvCallBack((message) => {
