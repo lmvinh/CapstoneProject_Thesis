@@ -64,6 +64,36 @@ const initializeEnvFile = () => {
 
 initializeEnvFile();
 
+const appendToLog = (logEntry) => {
+  const logFilePath = path.join(__dirname, '../src/data/Log.json');
+  try {
+    let logData = [];
+    if (fs.existsSync(logFilePath)) {
+      const existingLog = fs.readFileSync(logFilePath, 'utf-8');
+      logData = JSON.parse(existingLog);
+    }
+    logData.push(logEntry);
+    fs.writeFileSync(logFilePath, JSON.stringify(logData, null, 2));
+  } catch (error) {
+    console.error('Error appending to Log.json:', error);
+  }
+};
+
+const appendToHistoryEnv = (logEntry) => {
+  const historyEnvPath = path.join(__dirname, '../src/data/historyenv.json');
+  try {
+    let existingData = [];
+    if (fs.existsSync(historyEnvPath)) {
+      const content = fs.readFileSync(historyEnvPath, 'utf-8');
+      existingData = JSON.parse(content);
+    }
+    existingData.push(logEntry);
+    fs.writeFileSync(historyEnvPath, JSON.stringify(existingData, null, 2));
+  } catch (error) {
+    console.error('Error appending to historyenv.json:', error);
+  }
+};
+
 app.get("/getENVdata", async (req, res) => {
   try {
     const Data = await TempModel.find();
@@ -93,6 +123,12 @@ app.post("/ENVPost", async (req, res) => {
     await newTemp.save();
     
     await writeTempDataToFile();
+    
+    // Log to Log.json
+    appendToLog(req.body);
+    
+    // Append to historyenv.json
+    appendToHistoryEnv(req.body);
     
     res.status(201).json(newTemp);
   } catch (error) {
@@ -150,17 +186,11 @@ app.post('/enviV', async (req, res) => {
   const dataEnvPath = path.join(__dirname, '../src/controllers/dataEnv.json');
   const historyEnvPath = path.join(__dirname, '../src/data/historyenv.json');
 
-  // Read the content of historyenv.json
-  fs.readFile(historyEnvPath, 'utf-8', (readErr, content) => {
-    if (readErr && readErr.code !== 'ENOENT') {
-      console.error('Error reading historyenv.json:', readErr);
-      return res.status(500).send('Error reading file');
-    }
-
-    // Parse existing data if the file exists
+  try {
+    // Check if the current data already exists to prevent duplicates
+    const content = fs.readFileSync(historyEnvPath, 'utf-8');
     const existingData = content ? JSON.parse(content) : [];
 
-    // Check if the current data already exists to prevent duplicates
     const exists = existingData.some(entry => 
       entry.temp === data.temp.toFixed(2) &&
       entry.humi === data.humi.toFixed(2) &&
@@ -175,18 +205,12 @@ app.post('/enviV', async (req, res) => {
         air: data.air.toFixed(2)
       };
 
-      // Append data with timestamp to historyenv.json
       existingData.push(logEntry);
-      fs.writeFile(historyEnvPath, JSON.stringify(existingData, null, 2), (writeErr) => {
-        if (writeErr) {
-          console.error('Error writing historyenv.json:', writeErr);
-          return res.status(500).send('Error saving data');
-        }
-        console.log('Data appended to historyenv.json');
-      });
+      fs.writeFileSync(historyEnvPath, JSON.stringify(existingData, null, 2));
+
+      appendToLog(logEntry); // Append to Log.json
     }
 
-    // Save the latest data to dataEnv.json
     fs.writeFile(dataEnvPath, JSON.stringify(data, null, 2), (writeErr) => {
       if (writeErr) {
         console.error('Error writing dataEnv.json:', writeErr);
@@ -195,7 +219,10 @@ app.post('/enviV', async (req, res) => {
       console.log('Data saved to dataEnv.json');
       res.status(200).send('Data saved and appended successfully');
     });
-  });
+  } catch (error) {
+    console.error('Error processing enviV request:', error);
+    res.status(500).send('Server error');
+  }
 });
 
 app.get('/relay-status', (req, res) => {

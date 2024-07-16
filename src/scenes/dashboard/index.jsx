@@ -6,9 +6,8 @@ import StatBoxWithGauge from "../../components/StatBoxWithGauge";
 import LineChart from "../../components/LineChart";
 import { tokens } from "../../Theme";
 import CurtainsIcon from "@mui/icons-material/Curtains";
+import { mockTransactions } from "../../data/mockData";
 import MQTTHelper from "../../controllers/mqttAPI";
-import ReviewsBar from "../../components/GaugeChart";
-
 const DashBoard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -144,26 +143,21 @@ const DashBoard = () => {
           gridColumn="span 8"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
+          position="relative" // Added position relative
         >
           <Box
-            mt="25px"
-            p="0 30px"
+            mt="15px"
+            p="0 15px"
             display="flex"
-            justifyContent="center"
+            justifyContent="space-between"
             alignItems="center"
           >
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Data sensor generate
-              </Typography>
-            </Box>
+            <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
+              Data sensor generate
+            </Typography>
           </Box>
           <Box height="250px" ml="-20px">
-            <LineChart isDashboard="true" />
+            <LineChart isDashboard={true} />
           </Box>
         </Box>
 
@@ -172,26 +166,51 @@ const DashBoard = () => {
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          p="30px"
+          overflow="auto"
         >
-          <Typography variant="h5" fontWeight="600" sx={{ mb: "15px" }}>
-            Campaign
-          </Typography>
-          <Box style={{ width: "100%", height: "100%" }}>
-            <ReviewsBar displayType="temp" />
-          </Box>
-          <Typography
-            variant="h5"
-            color={colors.greenAccent[500]}
-            sx={{ mt: "15px" }}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            borderBottom={`4px solid ${colors.primary[500]}`}
+            colors={colors.grey[100]}
+            p="15px"
           >
-            $48,352 revenue generated
-          </Typography>
-          <Typography>Includes extra misc expenditures and costs</Typography>
+            <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
+              Recent Transactions
+            </Typography>
+          </Box>
+          {mockTransactions.map((transaction, i) => (
+            <Box
+              key={`${transaction.txId}-${i}`}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              borderBottom={`4px solid ${colors.primary[500]}`}
+              p="15px"
+            >
+              <Box>
+                <Typography
+                  color={colors.greenAccent[500]}
+                  variant="h5"
+                  fontWeight="600"
+                >
+                  {transaction.txId}
+                </Typography>
+                <Typography color={colors.grey[100]}>
+                  {transaction.user}
+                </Typography>
+              </Box>
+              <Box color={colors.grey[100]}>{transaction.date}</Box>
+              <Box
+                backgroundColor={colors.greenAccent[500]}
+                p="5px 10px"
+                borderRadius="4px"
+              >
+                ${transaction.cost}
+              </Box>
+            </Box>
+          ))}
         </Box>
 
         {/* ROW 4 - Temperature, Humidity, Air */}
