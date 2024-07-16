@@ -6,8 +6,9 @@ import StatBoxWithGauge from "../../components/StatBoxWithGauge";
 import LineChart from "../../components/LineChart";
 import { tokens } from "../../Theme";
 import CurtainsIcon from "@mui/icons-material/Curtains";
-import { mockTransactions } from "../../data/mockData";
 import MQTTHelper from "../../controllers/mqttAPI";
+import LogData from "../../data/Log.json"; // Assuming Log.json is in your project
+
 const DashBoard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -15,6 +16,7 @@ const DashBoard = () => {
   const [tempData, setTempData] = useState(0);
   const [humiData, setHumiData] = useState(0);
   const [airData, setAirData] = useState(0);
+  const [logEntries, setLogEntries] = useState([]);
 
   useEffect(() => {
     const mqttHelper = new MQTTHelper();
@@ -26,9 +28,15 @@ const DashBoard = () => {
       setAirData(data.air);
     });
 
+    // Clean up MQTT client on unmount
     return () => {
       mqttHelper.mqttClient.end();
     };
+  }, []);
+
+  useEffect(() => {
+    // Update log entries from Log.json
+    setLogEntries(LogData);
   }, []);
 
   return (
@@ -161,7 +169,7 @@ const DashBoard = () => {
           </Box>
         </Box>
 
-        {/* ROW 3 - Campaign Statistics */}
+        {/* ROW 3 - Log Entries */}
         <Box
           gridColumn="span 4"
           gridRow="span 2"
@@ -177,38 +185,48 @@ const DashBoard = () => {
             p="15px"
           >
             <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
-              Recent Transactions
+              Log
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          {logEntries.map((entry, index) => (
             <Box
-              key={`${transaction.txId}-${i}`}
+              key={index}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
               borderBottom={`4px solid ${colors.primary[500]}`}
               p="15px"
             >
-              <Box>
-                <Typography
-                  color={colors.greenAccent[500]}
-                  variant="h5"
-                  fontWeight="600"
-                >
-                  {transaction.txId}
-                </Typography>
-                <Typography color={colors.grey[100]}>
-                  {transaction.user}
-                </Typography>
-              </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
-              <Box
-                backgroundColor={colors.greenAccent[500]}
-                p="5px 10px"
-                borderRadius="4px"
-              >
-                ${transaction.cost}
-              </Box>
+              {entry.timestamp ? (
+                <>
+                  <Typography
+                    color={colors.greenAccent[500]}
+                    variant="h5"
+                    fontWeight="600"
+                  >
+                    {entry.relay}
+                  </Typography>
+                  <Typography color={colors.grey[100]}>
+                    Status: {entry.status ? "ON" : "OFF"}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography
+                    color={colors.greenAccent[500]}
+                    variant="h5"
+                    fontWeight="600"
+                  >
+                    {"Sensor EnvIV"}
+                  </Typography>
+                  <Typography color={colors.grey[100]}>
+                    Temp: {entry.temp}, Humi: {entry.humi}, Air: {entry.air}
+                  </Typography>
+                </>
+              )}
+              <Typography color={colors.grey[100]}>
+                {new Date(entry.timestamp || entry.date).toLocaleString()}
+              </Typography>
             </Box>
           ))}
         </Box>

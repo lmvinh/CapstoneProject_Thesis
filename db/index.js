@@ -169,14 +169,41 @@ const getEnvIVStatus = () => {
 
 app.post('/relay-status', (req, res) => {
   const { relay, status } = req.body;
+  const timestamp = new Date().toISOString();
 
-  const statuses = getRelayStatus();
+  // Get current relay statuses
+  const currentStatuses = getRelayStatus();
 
-  statuses[relay] = status;
+  // Check if the relay status is actually changing
+  if (currentStatuses[relay] !== status) {
+    // Update the relay status
+    currentStatuses[relay] = status;
 
-  setRelayStatus(statuses);
+    // Save the updated relay statuses
+    setRelayStatus(currentStatuses);
 
-  res.status(200).json({ message: 'Relay status updated', statuses });
+    // Log the specific relay change with timestamp to Log.json
+    const logEntry = { timestamp, relay, status };
+
+    try {
+      const logFilePath = path.join(__dirname, '../src/data/Log.json');
+      let logData = [];
+      if (fs.existsSync(logFilePath)) {
+        const existingLog = fs.readFileSync(logFilePath, 'utf-8');
+        logData = JSON.parse(existingLog);
+      }
+      logData.push(logEntry);
+      fs.writeFileSync(logFilePath, JSON.stringify(logData, null, 2));
+
+      res.status(200).json({ message: 'Relay status updated', logEntry });
+    } catch (error) {
+      console.error('Error appending to Log.json:', error);
+      res.status(500).json({ error: 'Failed to append to Log.json' });
+    }
+  } else {
+    // If the status is the same, send a response indicating no change
+    res.status(200).json({ message: 'Relay status unchanged', relay, status });
+  }
 });
 
 app.post('/enviV', async (req, res) => {
