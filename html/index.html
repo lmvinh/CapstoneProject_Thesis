@@ -1,67 +1,228 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>M5ATOM ENV Monitor</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESP32 Sensor Dashboard</title>
     <style>
+      html {
+        font-family: Arial;
+        display: inline-block;
+        text-align: center;
+      }
+      h2 {
+        font-size: 3rem;
+      }
+      p {
+        font-size: 3rem;
+      }
       body {
-        background: #FFFFFF;
-        margin: 0;
+        max-width: 600px;
+        margin: 0px auto;
+        padding-bottom: 25px;
       }
-      #HeadFont {
-        font-family: Impact, Charcoal, sans-serif;
-        font-size: 25px;
-        letter-spacing: 2px;
-        word-spacing: 2px;
-        color: #FFFFFF;
-        font-weight: normal;
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 120px;
+        height: 68px;
       }
-      #DataFont {
-        font-family: "Lucida Console", Monaco, monospace;
-        font-size: 18px;
-        letter-spacing: 2px;
-        word-spacing: 2px;
-        color: #FFFFFF;
-        font-weight: 400;
+      .switch input {
+        display: none;
+      }
+      .slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #f63e36;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 52px;
+        width: 52px;
+        left: 8px;
+        bottom: 8px;
+        background-color: #fff;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+        border-radius: 68px;
+      }
+      input:checked + .slider {
+        background-color: #3cc33c;
+      }
+      input:checked + .slider:before {
+        -webkit-transform: translateX(52px);
+        -ms-transform: translateX(52px);
+        transform: translateX(52px);
       }
     </style>
-    <script>
-        window.onload = function(){    
-            document.getElementById('temperatureOutput').innerHTML = temperatureValue+"&deg;C";
-            document.getElementById('humidityOutput').innerHTML = humidityValue+"&percnt;";
-            document.getElementById('pressureOutput').innerHTML = pressureValue+"hPa";
-        };
-    </script>
-    <script type="text/javascript" src="data.js"></script>
   </head>
   <body>
-    <table style="background-color: #7f7f7f; border-color: #000000; margin-left: auto; margin-right: auto; cellspacing=10">
-    <tbody>
-        <tr>
-            <td id="HeadFont" style="text-align: center;">M5ATOM ENV monitor</td>
-            <td><img alt="" src="electric-idea_100x100.jpg"/></td>
-        </tr>
-        <tr>
-            <td>
-            <table style="float: center;" cellspacing="10">
-            <tbody id="DataFont">
-            <tr>
-                <td style="text-align: right;">Temperature:</td>
-                <td id="temperatureOutput" style="letter-spacing: 0px;"></td>
-            </tr>
-            <tr>
-                <td style="text-align: right;">Humidity:</td>
-                <td id="humidityOutput"></td>
-            </tr>
-            <tr>
-                <td style="text-align: right;">Air Pressure:</td>
-                <td id="pressureOutput"></td>
-            </tr>
-            </tbody>
-            </table>
-            </td>
-        </tr>
-    </tbody>
-    </table>
+    <div>
+      <h2>Sensor Data</h2>
+      <p>Temperature: <span id="temperature">--</span> °C</p>
+      <p>Humidity: <span id="humidity">--</span> %</p>
+      <p>Pressure: <span id="pressure">--</span> hPa</p>
+    </div>
+    <div>
+      <p>%BUTTONPLACEHOLDER%</p>
+      <p>%BUTTONPLACEHOLDER2%</p>
+      <p>%BUTTONPLACEHOLDER3%</p>
+      <p>%BUTTONPLACEHOLDER4%</p>
+
+      <script>
+        function toggleCheckbox(element) {
+          var xhr = new XMLHttpRequest();
+          if (element.checked) {
+            xhr.open("GET", "/update?state=1", true);
+          } else {
+            xhr.open("GET", "/update?state=0", true);
+          }
+          xhr.send();
+        }
+
+        function toggleCheckbox2(element) {
+          var xhr2 = new XMLHttpRequest();
+          if (element.checked) {
+            xhr2.open("GET", "/update?state2=1", true);
+          } else {
+            xhr2.open("GET", "/update?state2=0", true);
+          }
+          xhr2.send();
+        }
+
+        setInterval(function () {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              var inputChecked;
+              var outputStateM;
+
+              if (this.responseText == 1) {
+                inputChecked = true;
+                outputStateM = "ON";
+              } else {
+                inputChecked = false;
+                outputStateM = "OFF";
+              }
+              document.getElementById("output").checked = inputChecked;
+              document.getElementById("outputState").innerHTML = outputStateM;
+            }
+          };
+          xhttp.open("GET", "/state", true);
+          xhttp.send();
+
+          var xhttp2 = new XMLHttpRequest();
+          xhttp2.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              var inputChecked2;
+              var outputStateM2;
+
+              if (this.responseText == 1) {
+                inputChecked2 = true;
+                outputStateM2 = "ON";
+              } else {
+                inputChecked2 = false;
+                outputStateM2 = "OFF";
+              }
+              document.getElementById("output2").checked = inputChecked2;
+              document.getElementById("outputState2").innerHTML = outputStateM2;
+            }
+          };
+          xhttp2.open("GET", "/state2", true);
+          xhttp2.send();
+        }, 1000);
+      </script>
+    </div>
+    <script>
+      function toggleCheckbox(element) {
+        var xhr = new XMLHttpRequest();
+        if (element.checked) {
+          xhr.open("GET", "/update?state=1", true);
+        } else {
+          xhr.open("GET", "/update?state=0", true);
+        }
+        xhr.send();
+      }
+
+      function toggleCheckbox2(element) {
+        var xhr2 = new XMLHttpRequest();
+        if (element.checked) {
+          xhr2.open("GET", "/update?state2=1", true);
+        } else {
+          xhr2.open("GET", "/update?state2=0", true);
+        }
+        xhr2.send();
+      }
+
+      setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            var inputChecked;
+            var outputStateM;
+
+            if (this.responseText == 1) {
+              inputChecked = true;
+              outputStateM = "ON";
+            } else {
+              inputChecked = false;
+              outputStateM = "OFF";
+            }
+            document.getElementById("output").checked = inputChecked;
+            document.getElementById("outputState").innerHTML = outputStateM;
+          }
+        };
+        xhttp.open("GET", "/state", true);
+        xhttp.send();
+
+        var xhttp2 = new XMLHttpRequest();
+        xhttp2.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            var inputChecked2;
+            var outputStateM2;
+
+            if (this.responseText == 1) {
+              inputChecked2 = true;
+              outputStateM2 = "ON";
+            } else {
+              inputChecked2 = false;
+              outputStateM2 = "OFF";
+            }
+            document.getElementById("output2").checked = inputChecked2;
+            document.getElementById("outputState2").innerHTML = outputStateM2;
+          }
+        };
+        xhttp2.open("GET", "/state2", true);
+        xhttp2.send();
+      }, 1000);
+      function updateSensorData() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "/ajax_data", true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              document.getElementById("temperature").textContent =
+                data.temperature.toFixed(2);
+              document.getElementById("humidity").textContent =
+                data.humidity.toFixed(2);
+              document.getElementById("pressure").textContent =
+                data.pressure.toFixed(2);
+            } catch (error) {
+              console.error("Failed to parse JSON data:", error);
+            }
+          }
+        };
+        xhr.send();
+      }
+
+      // Update sensor data every 5 seconds
+      setInterval(updateSensorData, 5000);
+    </script>
   </body>
 </html>
