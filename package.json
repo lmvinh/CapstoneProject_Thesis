@@ -30,6 +30,7 @@
     "formik": "^2.4.6",
     "fs": "^0.0.1-security",
     "fullcalendar": "^6.1.14",
+    "gh-pages": "^6.1.1",
     "mongodb": "^6.8.0",
     "mongoose": "^8.4.5",
     "mqtt": "^5.8.0",
@@ -47,9 +48,8 @@
     "web-vitals": "^2.1.4",
     "yup": "^1.4.0"
   },
-
   "scripts": {
-"start": "set PORT=3001 && react-scripts start",
+    "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
