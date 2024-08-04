@@ -1,6 +1,6 @@
 {
-  "relay1": false,
+  "relay1": true,
   "relay2": false,
-  "relay3": false,
+  "relay3": true,
   "relay4": true
 }
