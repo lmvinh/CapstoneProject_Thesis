@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/CapstoneProjec_Thesis/static/css/main.56015112.css",
-    "main.js": "/CapstoneProjec_Thesis/static/js/main.e68388f6.js",
-    "index.html": "/CapstoneProjec_Thesis/index.html",
-    "main.56015112.css.map": "/CapstoneProjec_Thesis/static/css/main.56015112.css.map",
-    "main.e68388f6.js.map": "/CapstoneProjec_Thesis/static/js/main.e68388f6.js.map"
+    "main.css": "/CapstoneProject_Thesis/static/css/main.56015112.css",
+    "main.js": "/CapstoneProject_Thesis/static/js/main.e68388f6.js",
+    "index.html": "/CapstoneProject_Thesis/index.html",
+    "main.56015112.css.map": "/CapstoneProject_Thesis/static/css/main.56015112.css.map",
+    "main.e68388f6.js.map": "/CapstoneProject_Thesis/static/js/main.e68388f6.js.map"
   },
   "entrypoints": [
     "static/css/main.56015112.css",
