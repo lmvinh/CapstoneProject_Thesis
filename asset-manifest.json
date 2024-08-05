@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.56015112.css",
-    "main.js": "/static/js/main.5289cb4d.js",
-    "index.html": "/index.html",
-    "main.56015112.css.map": "/static/css/main.56015112.css.map",
-    "main.5289cb4d.js.map": "/static/js/main.5289cb4d.js.map"
+    "main.css": "/CapstoneProjec_Thesis/static/css/main.56015112.css",
+    "main.js": "/CapstoneProjec_Thesis/static/js/main.e68388f6.js",
+    "index.html": "/CapstoneProjec_Thesis/index.html",
+    "main.56015112.css.map": "/CapstoneProjec_Thesis/static/css/main.56015112.css.map",
+    "main.e68388f6.js.map": "/CapstoneProjec_Thesis/static/js/main.e68388f6.js.map"
   },
   "entrypoints": [
     "static/css/main.56015112.css",
-    "static/js/main.5289cb4d.js"
+    "static/js/main.e68388f6.js"
   ]
 }
