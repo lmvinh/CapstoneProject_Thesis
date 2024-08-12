@@ -5,36 +5,46 @@ const char index_html[] PROGMEM = R"rawliteral(
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP32 Sensor Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Roboto', sans-serif;
+            background-color: #e9ecef;
             color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
         .sensor-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 650px;
+            margin: 20px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         h2 {
-            color: #5a5a5a;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: 700;
         }
         p {
-            font-size: 18px;
+            font-size: 20px;
+            margin: 15px 0;
         }
         .relay-container {
-            margin-top: 20px;
+            margin-top: 30px;
         }
         .switch {
             position: relative;
             display: inline-block;
-            width: 60px;
+            width: 64px;
             height: 34px;
+            margin: 0 10px;
         }
         .switch input {
             opacity: 0;
@@ -67,15 +77,23 @@ const char index_html[] PROGMEM = R"rawliteral(
             background-color: #007bff;
         }
         input:focus + .slider {
-            box-shadow: 0 0 1px #007bff;
+            box-shadow: 0 0 2px #007bff;
         }
         input:checked + .slider:before {
-            transform: translateX(26px);
+            transform: translateX(30px);
         }
         .switch-label {
             display: block;
             font-size: 18px;
             margin-bottom: 10px;
+            font-weight: 500;
+            color: #555;
+        }
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -88,33 +106,37 @@ const char index_html[] PROGMEM = R"rawliteral(
 
         <div class="relay-container">
             <h2>Relay Control</h2>
-            <div>
-                <label class="switch-label" for="relay1">Relay 1</label>
-                <label class="switch">
-                    <input type="checkbox" id="relay1" onchange="toggleRelay(0, this.checked)">
-                    <span class="slider"></span>
-                </label>
+            <div class="switch-container">
+                <div>
+                    <label class="switch-label" for="relay1">Relay 1</label>
+                    <label class="switch">
+                        <input type="checkbox" id="relay1" onchange="toggleRelay(0, this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div>
+                    <label class="switch-label" for="relay2">Relay 2</label>
+                    <label class="switch">
+                        <input type="checkbox" id="relay2" onchange="toggleRelay(1, this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
             </div>
-            <div>
-                <label class="switch-label" for="relay2">Relay 2</label>
-                <label class="switch">
-                    <input type="checkbox" id="relay2" onchange="toggleRelay(1, this.checked)">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div>
-                <label class="switch-label" for="relay3">Relay 3</label>
-                <label class="switch">
-                    <input type="checkbox" id="relay3" onchange="toggleRelay(2, this.checked)">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div>
-                <label class="switch-label" for="relay4">Relay 4</label>
-                <label class="switch">
-                    <input type="checkbox" id="relay4" onchange="toggleRelay(3, this.checked)">
-                    <span class="slider"></span>
-                </label>
+            <div class="switch-container">
+                <div>
+                    <label class="switch-label" for="relay3">Relay 3</label>
+                    <label class="switch">
+                        <input type="checkbox" id="relay3" onchange="toggleRelay(2, this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div>
+                    <label class="switch-label" for="relay4">Relay 4</label>
+                    <label class="switch">
+                        <input type="checkbox" id="relay4" onchange="toggleRelay(3, this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
             </div>
         </div>
     </div>

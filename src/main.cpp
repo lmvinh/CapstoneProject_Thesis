@@ -21,7 +21,7 @@
 #include "M5UnitENV.h"
 #include "M5Atom.h"
 #include "Unit_4RELAY.h"
-
+#include "nbiot.h"
 // install the M5ATOM library:
 // pio lib install "M5Atom"
 
@@ -41,13 +41,13 @@
 unsigned long next_millis;
 
 enum HTMLGetRequest {
-    GET_unknown = 0,
-    GET_index_page,
-    GET_favicon,
-    GET_logo,
-    GET_script,
-    GET_ajax_data,
-    GET_toggle_relay  // New request type for relay toggling
+	GET_unknown = 0,
+	GET_index_page,
+	GET_favicon,
+	GET_logo,
+	GET_script,
+	GET_ajax_data,
+	GET_toggle_relay  // New request type for relay toggling
 };
 
 // ENVIII:
@@ -66,10 +66,12 @@ int n_average = 1;
 // WiFi network configuration:
 char wifi_ssid[33];
 char wifi_key[65];
-const char* ssid     = "ACLAB";
-const char* password = "ACLAB2023";
-// const char* ssid     = "Amercland";
+// const char* ssid     = "ACLAB";
+// const char* password = "ACLAB2023";
+// const char* ssid     = "Amercland";z
 // const char* password = "yenlam1507";
+const char* ssid     = "Misfit";
+ const char* password = "12356789";
 WiFiClient myclient;
 WiFiServer server(80);
 
@@ -83,14 +85,24 @@ int html_get_request;
 
 #include "index.h"
 UNIT_4RELAY relay;
-
 //*********************Variables declaration**********************
-
+IPAddress staticIP(172, 28, 182, 185); // ESP32 static IP
+IPAddress gateway(172, 28, 182, 1);    // IP Address of your network gateway (router)
+IPAddress subnet(255, 255, 255, 0);   // Subnet maskc
+IPAddress primaryDNS(172, 28, 182, 1);  // Primary DNS (optional)//-----
+IPAddress secondaryDNS(0, 0, 0, 0);   // Secondary DNS (optional)ssadsdsa
+// // Replaces placeholder with button section in your web page
+// IPAddress staticIP(192, 168, 1, 185); // ESP32 static IP192.168.101.165
+// IPAddress gateway(192, 168, 1, 1);    // IP Address of your network gateway (router)
+// IPAddress subnet(255, 255, 255, 0);   // Subnet maskc
+// IPAddress primaryDNS(192, 168, 1, 1);  // Primary DNS (optional)//-----
+// IPAddress secondaryDNS(0, 0, 0, 0);   // Secondary DNS (optional)ssadsdsa
 // Replaces placeholder with button section in your web page
 
 // Function to parse relay number and state from the request string
 bool parseRelayRequest(String request, int &relayNum, int &state);
-
+void publishEnv(String value);
+void publishRelay(String payload);
 // forward declarations:
 void I2Cscan();
 boolean connect_Wifi();
@@ -101,226 +113,237 @@ BMP280 bmp;
 unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
 unsigned long debounceDelay = 50; // the debounce time; increase if the output flickers
 void setup() {
-    // start the ATOM device with Serial and Display (one LED)
-    M5.begin(true, false, true);
-    Wire.begin(25, 21);         
-    relay.begin(&Wire, 25, 21);
-    relay.Init(1);  // Set the lamp and relay to synchronous mode
-    delay(50); 
-    M5.dis.fillpix(LED_ERROR); 
-    Serial.println("M5ATOM ENV monitor");
-    Serial.println("v1.0 | 26.11.2021");
-    relay.relayAll(0);
-    I2Cscan();
-    WiFi.mode(WIFI_STA);
-    WiFi.disconnect();
-    delay(5000);
-    connect_Wifi();
-    server.begin();     
+	// start the ATOM device with Serial and Display (one LED)
+	M5.begin(true, false, true);
+	Wire.begin(25, 21);         
+	relay.begin(&Wire, 25, 21);
+	relay.Init(1);  // Set the lamp and relay to synchronous mode
+	delay(50); 
+	M5.dis.fillpix(LED_ERROR); 
+	Serial.println("M5ATOM ENV monitor");
+	Serial.println("v1.0 | 26.11.2021");
+	relay.relayAll(0);
+	I2Cscan();
+	WiFi.mode(WIFI_STA);
+	WiFi.disconnect();
+	delay(1000);
+	connect_Wifi();
+	SetupNbiot();
+		mainTainMqtt();
 
-    if (!sht4.begin(&Wire, SHT40_I2C_ADDR_44, 25, 21, 400000U)) {
-        Serial.println("Couldn't find SHT4x");
-        while (1) delay(1);
-    }
-    
-    sht4.setPrecision(SHT4X_HIGH_PRECISION);
-    sht4.setHeater(SHT4X_NO_HEATER);
+	server.begin();     
+	if (!sht4.begin(&Wire, SHT40_I2C_ADDR_44, 25, 21, 400000U)) {
+		Serial.println("Couldn't find SHT4x");
+		while (1) delay(1);
+	}
+	
+	sht4.setPrecision(SHT4X_HIGH_PRECISION);
+	sht4.setHeater(SHT4X_NO_HEATER);
 
-    if (!bmp.begin(&Wire, BMP280_I2C_ADDR, 25, 21, 400000U)) {
-        Serial.println("Couldn't find BMP280");
-        while (1) delay(1);
-    }
-    
-    bmp.setSampling(BMP280::MODE_NORMAL, 
-                                    BMP280::SAMPLING_X2,     
-                                    BMP280::SAMPLING_X16,    
-                                    BMP280::FILTER_X16,      
-                                    BMP280::STANDBY_MS_500); 
- 
-    next_millis = millis() + 5000; // Start after 5 seconds
+	if (!bmp.begin(&Wire, BMP280_I2C_ADDR, 25, 21, 400000U)) {
+		Serial.println("Couldn't find BMP280");
+		while (1) delay(1);
+	}
+	
+	bmp.setSampling(BMP280::MODE_NORMAL, 
+									BMP280::SAMPLING_X2,     
+									BMP280::SAMPLING_X16,    
+									BMP280::FILTER_X16,      
+									BMP280::STANDBY_MS_500); 
+	next_millis = millis() + 5000; // Start after 5 seconds
+	publishEnv("hello topic!!");
 }
 
 void loop() {
-    unsigned long current_millis = millis();
+	
+	unsigned long current_millis = millis();
+	if (current_millis > next_millis) {
+		Serial.println("Measure");
+		next_millis = current_millis + 3000; // Update every 3 seconds
+		M5.dis.fillpix(LED_MEASURE);
 
-    if (current_millis > next_millis) {
-        Serial.println("Measure");
-        next_millis = current_millis + 3000; // Update every 3 seconds
-        M5.dis.fillpix(LED_MEASURE);
+		if (sht4.getHeater() != 0) {
+			return;
+		}
 
-        if (sht4.getHeater() != 0) {
-            return;
-        }
+		if (sht4.update() && bmp.update()) {
+			qmp_Pressure = ((qmp_Pressure * (n_average - 1)) + bmp.pressure) / n_average;
+			sht30_Temperature = ((sht30_Temperature * (n_average - 1)) + sht4.cTemp) / n_average;
+			sht30_Humidity = ((sht30_Humidity * (n_average - 1)) + sht4.humidity) / n_average;
 
-        if (sht4.update()) {
-            qmp_Pressure = ((qmp_Pressure * (n_average - 1)) + bmp.pressure) / n_average;
-            sht30_Temperature = ((sht30_Temperature * (n_average - 1)) + sht4.cTemp) / n_average;
-            sht30_Humidity = ((sht30_Humidity * (n_average - 1)) + sht4.humidity) / n_average;
+			if (n_average < 10)
+				n_average++;
+		}
+	}
+	// Handle HTTP requests
+	WiFiClient client = server.available();
+	if (client) {
+		unsigned long timeout_millis = millis() + 5000;
+		M5.dis.fillpix(LED_NETWORK);
+		Serial.println("New Client.");
+		String currentLine = "";
+		String request = "";
 
-            if (n_average < 10)
-                n_average++;
-        }
-    }
+		while (client.connected()) {
+			if (millis() > timeout_millis) {
+				Serial.println("Force Client stop!");
+				client.stop();
+			}
 
-    // Handle HTTP requests
-    WiFiClient client = server.available();
-    if (client) {
-        unsigned long timeout_millis = millis() + 5000;
-        M5.dis.fillpix(LED_NETWORK);
-        Serial.println("New Client.");
-        String currentLine = "";
-        String request = "";
+			if (client.available()) {
+				char c = client.read();
+				Serial.write(c);
+				request += c;
 
-        while (client.connected()) {
-            if (millis() > timeout_millis) {
-                Serial.println("Force Client stop!");
-                client.stop();
-            }
+				if (c == '\n') {
+					if (currentLine.length() == 0) {
+						// Parse the request and determine the GET request type
+						if (request.startsWith("GET / ")) {
+							html_get_request = GET_index_page;
+						} else if (request.startsWith("GET /script")) {
+							html_get_request = GET_script;
+						} else if (request.startsWith("GET /ajax_data")) {
+							html_get_request = GET_ajax_data;
+						} else if (request.startsWith("GET /toggle")) {
+							html_get_request = GET_toggle_relay;
+						} else {
+							html_get_request = GET_unknown;
+						}
+						// Handle the request
+						switch (html_get_request) {
+							case GET_index_page: {
+								client.println("HTTP/1.1 200 OK");
+								client.println("Content-type:text/html");
+								client.println();
+								client.write_P(index_html, sizeof(index_html));
+								break;
+							}
+							case GET_script: {
+								client.println("HTTP/1.1 200 OK");
+								client.println("Content-type:application/javascript");
+								client.println();
+								client.printf("var temperatureValue = %3.2f;\n", sht30_Temperature);
+								client.printf("var humidityValue = %3.2f;\n", sht30_Humidity);
+								client.printf("var pressureValue = %3.2f;\n", qmp_Pressure / 100.0F);
+								
+								break;
+							}
+							case GET_ajax_data: {
+								client.println("HTTP/1.1 200 OK");
+								client.println("Content-type:application/json");
+								client.println();
+								client.printf("{\"temperature\":%3.2f,\"humidity\":%3.2f,\"pressure\":%3.2f}\n", sht30_Temperature, sht30_Humidity, qmp_Pressure / 100.0F);
+								break;
+							}
+							case GET_toggle_relay: {
+								String curstate1,curstate2,curstate3,curstate4;
+								// Manually parse relay number and state from the request string
+								int relayNum = 0, state = 0;
+								if (parseRelayRequest(request, relayNum, state)) {
+									// Ensure relayNum is between 0 and 3
+									if (relayNum >= 0 && relayNum <= 3) {
+										relay.relayWrite(relayNum, state);  // Use relayWrite to set the relay state
+										
+										String payload = "{Relay1:"+ String(state) + ",Relay2:"+String(state) +",Relay3:"+String(state) +",Relay4:"+String(state) +"}";
+										publishRelay(payload);
+										Serial.printf("Relay %d set to %d\n", relayNum, state);
+									} else {
+										Serial.println("Invalid relay number!");
+									}
+								}
 
-            if (client.available()) {
-                char c = client.read();
-                Serial.write(c);
-                request += c;
-
-                if (c == '\n') {
-                    if (currentLine.length() == 0) {
-                        // Parse the request and determine the GET request type
-                        if (request.startsWith("GET / ")) {
-                            html_get_request = GET_index_page;
-                        } else if (request.startsWith("GET /script")) {
-                            html_get_request = GET_script;
-                        } else if (request.startsWith("GET /ajax_data")) {
-                            html_get_request = GET_ajax_data;
-                        } else if (request.startsWith("GET /toggle")) {
-                            html_get_request = GET_toggle_relay;
-                        } else {
-                            html_get_request = GET_unknown;
-                        }
-
-                        // Handle the request
-                        switch (html_get_request) {
-                            case GET_index_page: {
-                                client.println("HTTP/1.1 200 OK");
-                                client.println("Content-type:text/html");
-                                client.println();
-                                client.write_P(index_html, sizeof(index_html));
-                                break;
-                            }
-                            case GET_script: {
-                                client.println("HTTP/1.1 200 OK");
-                                client.println("Content-type:application/javascript");
-                                client.println();
-                                client.printf("var temperatureValue = %3.2f;\n", sht30_Temperature);
-                                client.printf("var humidityValue = %3.2f;\n", sht30_Humidity);
-                                client.printf("var pressureValue = %3.2f;\n", qmp_Pressure / 100.0F);
-                                break;
-                            }
-                            case GET_ajax_data: {
-                                client.println("HTTP/1.1 200 OK");
-                                client.println("Content-type:application/json");
-                                client.println();
-                                client.printf("{\"temperature\":%3.2f,\"humidity\":%3.2f,\"pressure\":%3.2f}\n", sht30_Temperature, sht30_Humidity, qmp_Pressure / 100.0F);
-                                break;
-                            }
-                            case GET_toggle_relay: {
-                                // Manually parse relay number and state from the request string
-                                int relayNum = 0, state = 0;
-                                if (parseRelayRequest(request, relayNum, state)) {
-                                    // Ensure relayNum is between 0 and 3
-                                    if (relayNum >= 0 && relayNum <= 3) {
-                                        relay.relayWrite(relayNum, state);  // Use relayWrite to set the relay state
-                                        Serial.printf("Relay %d set to %d\n", relayNum, state);
-                                    } else {
-                                        Serial.println("Invalid relay number!");
-                                    }
-                                }
-
-                                client.println("HTTP/1.1 200 OK");
-                                client.println("Content-type:text/plain");
-                                client.println();
-                                client.println("OK");
-                                break;
-                            }
-                            default:
-                                client.println("HTTP/1.1 404 Not Found");
-                                client.println();
-                                break;
-                        }
-                        client.println();
-                        break;
-                    } else {
-                        currentLine = "";
-                    }
-                } else if (c != '\r') {
-                    currentLine += c;
-                }
-            }
-        }
-        client.stop();
-        Serial.println("Client Disconnected.");
-    }
+								client.println("HTTP/1.1 200 OK");
+								client.println("Content-type:text/plain");
+								client.println();
+								client.println("OK");
+								break;
+							}
+							default:
+								client.println("HTTP/1.1 404 Not Found");
+								client.println();
+								break;
+						}
+						client.println();
+						break;
+					} else {
+						currentLine = "";
+					}
+				} else if (c != '\r') {
+					currentLine += c;
+				}
+			}
+		}
+		client.stop();
+		Serial.println("Client Disconnected.");
+	}
 }
 
 // Scan I2C devices
 void I2Cscan() {
-    byte error, address;
-    int nDevices;
-    Serial.println("Scanning...");
-    nDevices = 0;
-    for (address = 1; address < 127; address++) {
-        Wire.beginTransmission(address);
-        error = Wire.endTransmission();
-        if (error == 0) {
-            Serial.print("I2C device found at address 0x");
-            if (address < 16) {
-                Serial.print("0");
-            }
-            Serial.print(address, HEX);
-            Serial.println("  !");
-            nDevices++;
-            delay(500);
-        } else if (error == 4) {
-            Serial.print("Unknown error at address 0x");
-            if (address < 16) {
-                Serial.print("0");
-            }
-            Serial.println(address, HEX);
-        }
-    }
-    if (nDevices == 0) {
-        Serial.println("No I2C devices found\n");
-    } else {
-        Serial.println("done\n");
-    }
+	byte error, address;
+	int nDevices;
+	Serial.println("Scanning...");
+	nDevices = 0;
+	for (address = 1; address < 127; address++) {
+		Wire.beginTransmission(address);
+		error = Wire.endTransmission();
+		if (error == 0) {
+			Serial.print("I2C device found at address 0x");
+			if (address < 16) {
+				Serial.print("0");
+			}
+			Serial.print(address, HEX);
+			Serial.println("  !");
+			nDevices++;
+			delay(500);
+		} else if (error == 4) {
+			Serial.print("Unknown error at address 0x");
+			if (address < 16) {
+				Serial.print("0");
+			}
+			Serial.println(address, HEX);
+		}
+	}
+	if (nDevices == 0) {
+		Serial.println("No I2C devices found\n");
+	} else {
+		Serial.println("done\n");
+	}
 }
 
 // Connect to WiFi
 boolean connect_Wifi() {
-    Serial.print("Connecting to ");
-    Serial.print(ssid);
-    WiFi.begin(ssid, password);
-    int i = 0;
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-        if (i++ > 60) {
-            Serial.println("Timeout, resetting...");
-            ESP.restart();
-        }
-    }
-    Serial.println("Connected!");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
-    return true;
+	Serial.print("Connecting to ");
+	Serial.print(ssid);
+	WiFi.begin(ssid, password);
+	int i = 0;
+	while (WiFi.status() != WL_CONNECTED) {
+		delay(500);
+		Serial.print(".");
+		if (i++ > 60) {
+			Serial.println("Timeout, resetting...");
+			ESP.restart();
+		}
+	}
+	 // Configuring static IP
+  if(!WiFi.config(staticIP, gateway, subnet, primaryDNS, secondaryDNS)) {
+	Serial.println("Failed to configure Static IP");
+  } else {
+	Serial.println("Static IP configured!");
+  }
+	Serial.println("Connected!");
+	Serial.println("IP address: ");
+	Serial.println(WiFi.localIP());
+	return true;
 }
 bool parseRelayRequest(String request, int &relayNum, int &state) {
-    int relayIndex = request.indexOf("relay=");
-    int stateIndex = request.indexOf("state=");
+	int relayIndex = request.indexOf("relay=");
+	int stateIndex = request.indexOf("state=");
 
-    if (relayIndex != -1 && stateIndex != -1) {
-        relayNum = request.substring(relayIndex + 6, request.indexOf('&', relayIndex)).toInt();
-        state = request.substring(stateIndex + 6, request.indexOf(' ', stateIndex)).toInt();
-        return true;
-    }
-    return false;
+	if (relayIndex != -1 && stateIndex != -1) {
+		relayNum = request.substring(relayIndex + 6, request.indexOf('&', relayIndex)).toInt();
+		state = request.substring(stateIndex + 6, request.indexOf(' ', stateIndex)).toInt();
+		return true;
+	}
+	return false;
 }
