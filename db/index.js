@@ -11,7 +11,7 @@ const app = express();
 
 dotenv.config();
 
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 8000; // Change this to 8000
 const MONGO_URL = process.env.MONGO_URL;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -260,4 +260,7 @@ app.get('/relay-status', (req, res) => {
 app.get('/envIV-status', (req, res) => {
   const statuses = getEnvIVStatus();
   res.json(statuses);
+});
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
