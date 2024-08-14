@@ -55,5 +55,5 @@ void SetupNbiot();
 void publishRelay(String payload);
 void mainTainMqtt(void);
 void publishEnv(String payload);
-
+//void turnRelay(int relayNum, int state);
 #endif
