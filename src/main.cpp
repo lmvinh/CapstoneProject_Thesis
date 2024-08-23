@@ -3,14 +3,13 @@
 #include "M5Atom.h"
 #include "string.h"
 #include "Unit_4RELAY.h"
-
+#include "ArduinoJson.h"
 #include "nbiot.h"
 
 #define LED_ERROR   0x110000
 #define LED_OK      0x001100
 #define LED_NETWORK 0x000011
 #define LED_MEASURE 0x111111
-
 unsigned long next_millis;
 
 enum HTMLGetRequest {
@@ -31,13 +30,15 @@ float qmp_Pressure = 0.0;
 float sht30_Temperature = 0.0;
 float sht30_Humidity = 0.0;
 int n_average = 1;
-
+//String cur = "";
 // WiFi network configuration:
 #include "WiFi.h"
 
 // WiFi credentials
 // const char* ssid = "Misfit";
 // const char* password = "12356789";
+// const char* ssid = "Amercland";
+// const char* password = "yenlam1507";
 const char* ssid = "ACLAB";
 const char* password = "ACLAB2023";
 WiFiClient myclient;
@@ -52,7 +53,7 @@ WiFiServer server(80);
 int html_get_request;
 
 #include "index.h"
-UNIT_4RELAY relay;
+extern  UNIT_4RELAY relay;
 
 // IPAddress staticIP(192, 168, 1, 185); 
 // IPAddress gateway(192, 168, 1, 1);    
@@ -69,11 +70,18 @@ void turnRelay(uint8_t relayNum, int state);
 bool parseRelayRequest(String request, int &relayNum, int &state);
 void publishEnv(String value);
 void publishRelay(String value);
+void controlRelaysFromString(String);
+void relaycontrolfromString(String mess);
+void updateWebServerRelaysFromString(const String &message) ;
+bool autoRelayRequest(const String& jsonString, const String& httpRequest, int &relayNum, int &state) ;
 void publishRelayStates() ;
 void I2Cscan();
 boolean connect_Wifi();
 SHT4X sht4;
 BMP280 bmp;
+String messRev;
+int isMessageReive = 0;
+//String cur = "";
 
 void setup() {
 	M5.begin(true, false, true);
@@ -112,16 +120,40 @@ void setup() {
 					BMP280::FILTER_X16,      
 					BMP280::STANDBY_MS_500); 
 	next_millis = millis() + 5000;
-	//publishEnv("hello topic!!");
-}
+	subscribeToTopic(MQTT_U_TOPIC_RELAY);
 
+
+}
+void relaycontrolfromString(String mess)
+{
+	int startIndex1 = mess.indexOf("1") + 3;
+	int startIndex2 = mess.indexOf("2") + 3;
+	int startIndex3 = mess.indexOf("3") + 3;
+	int startIndex4 = mess.indexOf("4") + 3;
+	if(mess[startIndex1] == 't')relay.relayWrite(0, 1); 
+	else relay.relayWrite(0, 0); 
+	if(mess[startIndex2] == 't')relay.relayWrite(1, 1); 
+	else relay.relayWrite(1, 0); 
+	if(mess[startIndex3] == 't')relay.relayWrite(2, 1); 
+	else relay.relayWrite(2, 0); 
+	if(mess[startIndex4]== 't')relay.relayWrite(3, 1); 
+	else relay.relayWrite(3, 0); 
+}
+int flatReceive = 0;
 void loop() {
 	mainTainMqtt();
+   // Serial.println(messRev);
+	if (messRev != NULL && messRev[2] == 'r') {
+		cur = messRev;  
+		Serial.println(cur);
+	}    
+	relaycontrolfromString(cur);
+	delay(1000);
 	unsigned long current_millis = millis();
 	
 	if (current_millis >= next_millis) {
 		Serial.println("Measure");
-		next_millis = current_millis + 3600000;  // Set the next measurement to happen in one hour
+		next_millis = current_millis + 1000000;  // Set the next measurement to happen in one hour
 		M5.dis.fillpix(LED_MEASURE);  // Visual feedback for the measurement
 
 		if (sht4.getHeater() != 0) {
@@ -203,10 +235,11 @@ void loop() {
 							}
 							case GET_toggle_relay: {
 								int relayNum = 0, state = 0;
+
 								if (parseRelayRequest(request, relayNum, state)) {
 									if (relayNum >= 0 && relayNum <= 3) {
 										relay.relayWrite(relayNum, state);
-										publishRelayStates();
+										publishRelayStates();  // Publish to the web server
 										Serial.printf("Relay %d set to %d\n", relayNum, state);
 									} else {
 										Serial.println("Invalid relay number!");
@@ -238,6 +271,7 @@ void loop() {
 		Serial.println("Client Disconnected.");
 	}
 }
+
 
 void I2Cscan() {
 	byte error, address;
@@ -325,120 +359,40 @@ bool parseRelayRequest(String request, int &relayNum, int &state) {
 	}
 	return false;
 }
+bool autoRelayRequest(const String& jsonString, const String& httpRequest, int &relayNum, int &state) {
+	// Initialize relay states to -1, which indicates they are not set
+	int relayStates[4] = {-1, -1, -1, -1};
 
+	// Parse the jsonString manually to extract relay states
+	int relay1Index = jsonString.indexOf("\"relay1\":");
+	int relay2Index = jsonString.indexOf("\"relay2\":");
+	int relay3Index = jsonString.indexOf("\"relay3\":");
+	int relay4Index = jsonString.indexOf("\"relay4\":");
 
-// // Define MQTT server settings
-// #define MQTT_SERVER   "mqttserver.tk"
-// #define MQTT_PORT     1883
-// #define MQTT_USERNAME "innovation"
-// #define MQTT_PASSWORD "Innovation_RgPQAZoA5N"
-// #define MQTT_U_TOPIC_ENV "/innovation/airmonitoring/WSNs/ABC/env"  //  Upload data topic
+	if (relay1Index != -1) {
+		relayStates[0] = jsonString.substring(relay1Index + 9, relay1Index + 13) == "true" ? 1 : 0;
+	}
+	if (relay2Index != -1) {
+		relayStates[1] = jsonString.substring(relay2Index + 9, relay2Index + 13) == "true" ? 1 : 0;
+	}
+	if (relay3Index != -1) {
+		relayStates[2] = jsonString.substring(relay3Index + 9, relay3Index + 13) == "true" ? 1 : 0;
+	}
+	if (relay4Index != -1) {
+		relayStates[3] = jsonString.substring(relay4Index + 9, relay4Index + 13) == "true" ? 1 : 0;
+	}
 
+	// Extract relay number from the HTTP request
+	int relayIndex = httpRequest.indexOf("relay=");
+	if (relayIndex != -1) {
+		relayNum = httpRequest.substring(relayIndex + 6, httpRequest.indexOf('&', relayIndex)).toInt() - 1; // relayNum starts from 0
 
-// #include "M5_SIM7080G.h"
+		// If relay number is valid, assign the corresponding state
+		if (relayNum >= 0 && relayNum < 4) {
+			state = relayStates[relayNum];
+			return true;
+		}
+	}
 
-// // Global instances
-
-// M5_SIM7080G device;
-
-// String readstr;
-
-// // Logging function to output to Serial and Screen
-// void log(String str) {
-// 	Serial.print(str);
-
-// }
-
-// void setup() {
-// 	// Initialize M5Stack and display
-// 	M5.begin(true,false,true);
-
-
-// 	// Initialize SIM7080G module with Serial2 on pins 16 (RX) and 17 (TX)
-// 	device.Init(&Serial2, 19, 22);
-
-// 	// Reboot the module
-// 	device.sendMsg("AT+CREBOOT\r\n");
-// 	delay(1000);
-
-// 	// Wait until a valid signal quality is obtained
-// 	while (true) {
-// 		device.sendMsg("AT+CSQ\r\n");
-// 		readstr = device.waitMsg(1000);
-// 		log(readstr);
-// 		if (readstr.indexOf("+CSQ: 99,99") == -1) {
-// 			break;
-// 		}
-// 	}
-
-// 	// Establish the network connection
-// 	while (true) {
-// 		device.sendMsg("AT+CNACT=0,1\r\n");
-// 		readstr = device.waitMsg(200);
-// 		log(readstr);
-
-// 		device.sendMsg("AT+CNACT?\r\n");
-// 		readstr = device.waitMsg(200);
-// 		log(readstr);
-
-// 		device.sendMsg("AT+SMCONF=\"URL\",\"mqttserver.tk\",\"1883\"\r\n");
-// 		readstr = device.waitMsg(1000);
-// 		log(readstr);
-		
-// 		device.sendMsg("AT+SMCONF=\"USERNAME\",\"" + String(MQTT_USERNAME) + "\"\r\n");
-// 		readstr = device.waitMsg(1000);
-// 		log(readstr);
-
-// 		device.sendMsg("AT+SMCONF=\"PASSWORD\",\"" + String(MQTT_PASSWORD) + "\"\r\n");
-// 		readstr = device.waitMsg(1000);
-// 		log(readstr);
-		
-// 		device.sendMsg("AT+SMCONF=\"KEEPTIME\",60\r\n");
-// 		readstr = device.waitMsg(1000);
-// 		log(readstr);
-
-// 		device.sendMsg("AT+SMCONF=\"CLEANSS\",1\r\n");
-// 		readstr = device.waitMsg(1000);
-// 		log(readstr);
-
-// 		device.sendMsg("AT+SMCONF=\"CLIENTID\",\"simmqtt\"\r\n");
-// 		readstr = device.waitMsg(1000);
-// 		log(readstr);
-
-// 		device.sendMsg("AT+SMCONN\r\n");
-// 		readstr = device.waitMsg(10000);
-// 		log(readstr);
-
-// 		// If connection is successful (no ERROR in the response), exit the loop
-// 		if (readstr.indexOf("ERROR") == -1) {
-// 			break;
-// 		}
-// 	}
-
-// 	// Subscribe to the topic
-
-
-// }
-
-// void loop() {
-// 	// Update the M5Stack's button status
-// 	M5.update();
-
-// 	// Check if BtnA is pressed and publish a message
-// 	if (M5.Btn.wasPressed()) {
-// 		float temp = 25 + static_cast<float>(random(0, 10000)) / 10000.0 * 7.0;  // temp from 25 to 32
-// 	float humi = 50 + static_cast<float>(random(0, 10000)) / 10000.0 * 10.0; // humi from 50 to 60
-// 	float air = 90 + static_cast<float>(random(0, 10000)) / 10000.0 * 10.0;  // air from 90 to 100
-
-// // Create the JSON payload
-// 		String payload = "{\"temp\":" + String(temp, 2) + ",\"humi\":" + String(humi, 2) + ",\"air\":" + String(air, 2) + "}";	
-// 		device.sendMsg("AT+SMPUB=\"/innovation/airmonitoring/WSNs/ABC/env\","+ String(payload.length()) +",1,1\r\n");
-// 		delay(100);
-// 		device.sendMsg(payload);
-// 	}
-
-// 	// Continuously read incoming messages and display them
-// 	readstr = device.waitMsg(0);
-// 	Serial.print(readstr);
-// 	log(readstr);
-// }
+	return false; // Return false if parsing fails
+}

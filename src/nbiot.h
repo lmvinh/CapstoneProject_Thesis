@@ -15,12 +15,14 @@ information：https://docs.m5stack.com/en/atom/atom_dtu_nb
 #ifndef INC_NBIOT_H_
 #define INC_NBIOT_H_
 #define TINY_GSM_MODEM_SIM7080
-
+#include "ArduinoJson.h"
 #include "M5Atom.h"
 #include <PubSubClient.h>
+#include "Unit_4RELAY.h"
+
 #include <TinyGsmClient.h>
 #include "M5_SIM7080G.h"
-
+#include "Unit_4RELAY.h"
 #include <time.h>
 #include <sys/time.h>
 #include "string.h"
@@ -55,5 +57,5 @@ void SetupNbiot();
 void publishRelay(String payload);
 void mainTainMqtt(void);
 void publishEnv(String payload);
-//void turnRelay(int relayNum, int state);
+void subscribeToTopic(String topic);
 #endif

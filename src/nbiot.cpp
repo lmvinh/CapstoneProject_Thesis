@@ -1,8 +1,8 @@
 #include <nbiot.h>   // Include TinyGSM library
-
+UNIT_4RELAY relay;
 // Define constants and variables
 M5_SIM7080G device;
-
+extern String messRev;
 String readstr;
 void log(String str) {
 	Serial.print(str);
@@ -61,7 +61,7 @@ void SetupNbiot() {
 		log(readstr);
 
 		device.sendMsg("AT+SMCONN\r\n");
-		readstr = device.waitMsg(10000);
+		readstr = device.waitMsg(5000);
 		log(readstr);
 
 		// If connection is successful (no ERROR in the response), exit the loop
@@ -73,10 +73,25 @@ void SetupNbiot() {
 
 void mainTainMqtt()
 {
+	
 	readstr = device.waitMsg(0);
-	Serial.print(readstr);
 	log(readstr);
+	int startIndex = readstr.indexOf('{');	
+	// Find the ending index of the JSON data
+	int endIndex = readstr.lastIndexOf('}') + 1;
+	// Extract the JSON substring
+	messRev = readstr.substring(startIndex, endIndex);
+		  // Extract relay states manually
 }
+
+void subscribeToTopic(String topic) {
+	device.sendMsg("AT+SMSUB=\"" + topic + "\",1\r\n");
+	readstr = device.waitMsg(1000);
+	log(readstr);
+
+}
+
+
 
 void publishRelay(String payload) {
 	device.sendMsg("AT+SMPUB=\"/innovation/airmonitoring/WSNs/ABC/relay\","+ String(payload.length()) +",1,1\r\n");
