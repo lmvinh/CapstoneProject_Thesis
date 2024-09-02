@@ -1,0 +1,107 @@
+.log-container{
+    width: 2000px;
+    
+    display: flex;
+    align-items: space-between;
+    background-color: rgb(18, 101, 169);
+    
+
+.widget { 
+      
+      height: 350px;
+      background-color: #fff;
+      border-radius: 5px;
+      margin: 10px;
+      box-shadow: 5px 5px 5px #939393;
+      &.left {
+      width: 22%;
+      background-color: rgb(205, 243, 69);
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+        @media only screen and (max-width: 1200px) {
+          width: 570px;
+        }
+      }
+      &.center{
+      width: 22%;
+      background-color: rgb(106, 241, 210);
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      }
+      &.right {
+        width: 55%;
+        background-color: white;
+        @media only screen and (max-width: 1600px) {
+          width: 570px;
+        }
+        @media only screen and (max-width: 1500px) {
+          width: 470px;
+        }
+        @media only screen and (max-width: 1400px) {
+          width: 370px;
+        }
+        @media only screen and (max-width: 1200px) {
+          width: 370px;
+        }
+      }
+    }
+}
+
+.chartMenu {
+    width: 100vw;
+    height: 40px;
+    background: #1A1A1A;
+    color: rgba(54, 162, 235, 1);
+  }
+  .chartMenu p {
+    padding: 10px;
+    font-size: 20px;
+  }
+  .chartCard {
+    width: 100vw;
+    height: calc(100vh - 40px);
+    background: rgba(54, 162, 235, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .chartBox {
+    width: 700px;
+    padding: 20px;
+    border-radius: 20px;
+    border: solid 3px rgba(54, 162, 235, 1);
+    background: white;
+  }
+  ngx-gauge {
+    width: 80%; 
+    height: auto;
+  }
+  .Header-gauge {
+    font-size: 20px; 
+    font-weight: bold;
+    color: #333; 
+    margin-bottom: 20px; 
+    text-align: center;
+  }
+  .header-logs{
+    
+    font-weight: bold;
+  }
+  
+  .log-container-in {
+    background-color:rgb(178, 219, 42) ;
+    height:100%;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .log-content {
+    margin-bottom: 20px;
+  }
+  
+  

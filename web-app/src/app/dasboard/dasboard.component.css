@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Aboreto&family=Exo:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap");
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body, html {
+    width: 100%;
+    height: 100%;
+  }
+  .main-container {
+    display: flex;
+    width: 100%;
+    background-color: rgb(73, 18, 160);
+    .side-nav {
+      width: 250px;
+      min-width: 230px;
+      min-height: calc(100vh - 70px);
+      background-color: #172632;
+      color: #fff;
+      box-shadow: 5px 5px 5px #939393;
+      @media only screen and (max-width: 1300px) {
+        width: 100px;
+        min-width: 100px;
+      }
+    }
+    .main {
+      padding: 30px;
+      width: 100%;
+    }
+  }
+  

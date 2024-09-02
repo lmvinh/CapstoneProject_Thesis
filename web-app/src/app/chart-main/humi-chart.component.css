@@ -1,0 +1,76 @@
+.chart-container{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(18, 101, 169);
+.widget {
+    height: 350px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin: 10px;
+    box-shadow: 5px 5px 5px #939393;
+    width: 48%;
+    
+    &.left {
+      width: 78%;
+      @media only screen and (max-width: 1600px) {
+        width: 790px;
+      }
+      @media only screen and (max-width: 1500px) {
+        width: 690px;
+      }
+      @media only screen and (max-width: 1400px) {
+        width: 590px;
+      }
+      @media only screen and (max-width: 1200px) {
+        width: 490px;
+      }
+    };
+    &.right
+    {
+      width: 19%;
+      background-color: olivedrab;
+      .average-container {
+        width: 100%;
+        background-color: olivedrab;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        align-items: center;
+      }
+      
+      .average-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .toggle-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-left: auto;
+      }
+      
+      .mat-button-toggle-group {
+        text-align: center;
+        margin-top: 30px;
+        margin: auto;
+        margin-top: 20px;
+        justify-content: space-between;
+      }
+      
+      .average-block {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 3px;
+        text-align: center;
+        justify-content: center;
+      }
+      
+      
+
+      
+    }
+         
+  }
+}

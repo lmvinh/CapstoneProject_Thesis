@@ -1,0 +1,50 @@
+
+<div class="log-container">  
+    <div class="widget left">
+    <!-- <div class="Header-gauge">Last Temperature Value:</div> -->
+    <div class="Header-gauge">Last Temperature Value:{{temperature| number:'2.2-2'}}°C</div>
+    
+      <ngx-gauge 
+      [type]="'arch'"
+      [value]="temperature"
+      [label]="'Temperature'"
+      [append]="'°C'"
+      [thick]="15"
+      [min]="0"
+      [max]="100"
+      [thresholds]="thresholdConfig"
+      [size]="200"
+    
+    ></ngx-gauge>
+    <div class="Header-gauge" style="font-weight: normal;">Last Modify:{{time}}</div>
+    </div>
+    <div class="widget center" >
+      <!--<div class=" Header-gauge">Last Humidity Value:</div> -->
+      <div class=" Header-gauge">Last Humidity Value: {{humidity| number:'2.2-2'}}%</div>
+      <ngx-gauge 
+      [type]="'arch'"
+      [value]="humidity"
+      [label]="'Humidity'"
+      [append]="'%'"
+      [thick]="15"
+      [min]="0"
+      [max]="100"
+      [thresholds]="thresholdConfig"    
+    ></ngx-gauge>
+    <div class="Header-gauge" style="font-weight: normal;">Last Modify:{{time}}</div>
+    </div>
+    <div class="widget right">
+      
+      <div class="log-container-in">
+        <div class="header-logs" > Logs History</div>
+        <div class="log-content">
+          <p *ngFor="let log of logs">{{ formatLog(log) }}</p>
+        </div>
+      
+        
+      </div>
+    </div>
+      
+</div> 
+
+    

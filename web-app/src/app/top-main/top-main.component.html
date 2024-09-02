@@ -1,0 +1,63 @@
+
+<div class="widget-container">
+    <div class="widget green">
+      <div class="icon">
+        <i class="material-icons">electric_bolt</i>
+      </div>
+      <div class="value">
+        <div >
+            <mat-slide-toggle id="switch1" [(ngModel)]="switch1" (change)="toggleSwitch1()" >
+                <div class="top" style="color: aliceblue;">
+                    Status:{{ switch1 ? 'On' : 'Off' }}
+                </div>
+            </mat-slide-toggle>
+        </div>
+        <div class="bottom">Relay1</div>
+      </div>
+    </div>
+    <div class="widget yellow">
+        <div class="icon">
+            <i class="material-icons">electric_bolt</i>
+          </div>
+          <div class="value">
+            <div >
+                <mat-slide-toggle id="switch2" [(ngModel)]="switch2" (change)="toggleSwitch2()" >
+                    <div class="top" style="color: aliceblue;">
+                        Status:{{ switch2 ? 'On' : 'Off' }}
+                    </div>
+                </mat-slide-toggle>
+            </div>
+            <div class="bottom">Relay2</div>
+          </div>
+    </div>
+    <div class="widget red">
+        <div class="icon">
+            <i class="material-icons">electric_bolt</i>
+          </div>
+          <div class="value">
+            <div >
+                <mat-slide-toggle id="switch3" [(ngModel)]="switch3" (change)="toggleSwitch3()" >
+                    <div class="top" style="color: aliceblue;">
+                        Status:{{ switch3 ? 'On' : 'Off' }}
+                    </div>
+                </mat-slide-toggle>
+            </div>
+            <div class="bottom">Relay3</div>
+          </div>
+    </div>
+    <div class="widget blue">
+        <div class="icon">
+            <i class="material-icons">electric_bolt</i>
+          </div>
+          <div class="value">
+            <div >
+                <mat-slide-toggle id="switch4" [(ngModel)]="switch4" (change)="toggleSwitch4()" >
+                    <div class="top" style="color: aliceblue;">
+                        Status:{{ switch4 ? 'On' : 'Off' }}
+                    </div>
+                </mat-slide-toggle>
+            </div>
+            <div class="bottom">Relay4</div>
+          </div>
+    </div>
+  </div>

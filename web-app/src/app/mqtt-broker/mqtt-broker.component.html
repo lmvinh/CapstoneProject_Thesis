@@ -1,0 +1,51 @@
+
+
+<div >
+    <div class="header">
+        <app-header> </app-header>
+    </div>
+    <div class="main-container">
+      <div class="side-nav">
+        <app-side-nav></app-side-nav>
+      </div>
+      <div class="main">
+        <div class="mqtt">
+            <div class="connection">
+              <h3>Connect to MQTT Broker</h3>
+              <form (ngSubmit)="connect()">
+                <input [(ngModel)]="clientId" name="clientId" placeholder="Client ID" required>
+                <input [(ngModel)]="username" name="username" placeholder="Username">
+                <input [(ngModel)]="password" name="password" placeholder="Password" type="password">
+                <button type="submit">Connect</button>
+              </form>
+            </div>
+          
+            <div class="subscription">
+                <h3>Subscribe to Topic</h3>
+                <input [(ngModel)]="topic" name="topic" placeholder="Topic" [disabled]="!isConnected">
+                <button (click)="subscribe()" [disabled]="!isConnected">Subscribe</button>
+            
+                <div *ngIf="messages.length > 0">
+                  <h4>Received Messages:</h4>
+                  <ul>
+                    <li *ngFor="let msg of messages">{{ msg }}</li>
+                  </ul>
+                </div>
+              </div>
+            
+              <div class="publication">
+                <h3>Publish to Topic</h3>
+                <input [(ngModel)]="pubTopic" name="pubTopic" placeholder="Topic" [disabled]="!isConnected">
+                <textarea [(ngModel)]="pubMessage" name="pubMessage" placeholder="Message" [disabled]="!isConnected"></textarea>
+                <button (click)="publish()" [disabled]="!isConnected">Publish</button>
+            </div>
+          </div>
+
+
+
+
+    </div>
+    </div>
+    
+</div>
+

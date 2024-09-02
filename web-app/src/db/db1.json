@@ -1,0 +1,364 @@
+{
+  "relay-status": [
+    {
+      "id": 1,
+      "relay1": true,
+      "relay2": false,
+      "relay3": true,
+      "relay4": true,
+      "timestamp": "2024-07-14T07:52:11.917Z"
+    },
+    {
+      "id": 2,
+      "state": {
+        "relay1": true,
+        "relay2": true,
+        "relay3": true,
+        "relay4": false
+      },
+      "timestamp": "2024-07-14T08:23:28.800Z"
+    },
+    {
+      "state": {
+        "relay1": true,
+        "relay2": false,
+        "relay3": true,
+        "relay4": true
+      },
+      "timestamp": "2024-07-14T09:42:49.537Z",
+      "id": 3
+    },
+    {
+      "state": {
+        "relay1": true,
+        "relay2": true,
+        "relay3": true,
+        "relay4": true
+      },
+      "timestamp": "2024-07-14T09:43:07.227Z",
+      "id": 4
+    },
+    {
+      "state": {
+        "relay1": true,
+        "relay2": true,
+        "relay3": false,
+        "relay4": true
+      },
+      "timestamp": "2024-08-01T18:58:25.193Z",
+      "id": 5
+    },
+    {
+      "state": {
+        "relay1": true,
+        "relay2": false,
+        "relay3": false,
+        "relay4": true
+      },
+      "timestamp": "2024-08-01T18:58:58.510Z",
+      "id": 6
+    },
+    {
+      "state": {
+        "relay1": true,
+        "relay2": true,
+        "relay3": false,
+        "relay4": false
+      },
+      "timestamp": "2024-08-01T19:00:28.776Z",
+      "id": 7
+    },
+    {
+      "state": {
+        "relay1": true,
+        "relay2": true,
+        "relay3": true,
+        "relay4": true
+      },
+      "timestamp": "2024-08-01T19:01:55.921Z",
+      "id": 8
+    },
+    {
+      "state": {
+        "relay1": false,
+        "relay2": true,
+        "relay3": false,
+        "relay4": true
+      },
+      "timestamp": "2024-08-01T19:02:00.697Z",
+      "id": 9
+    },
+    {
+      "state": {
+        "relay1": false,
+        "relay2": true,
+        "relay3": true,
+        "relay4": true
+      },
+      "timestamp": "2024-08-03T08:17:13.707Z",
+      "id": 10
+    },
+    {
+      "state": {
+        "relay1": false,
+        "relay2": false,
+        "relay3": true,
+        "relay4": true
+      },
+      "timestamp": "2024-08-03T08:17:30.823Z",
+      "id": 11
+    },
+    {
+      "state": {
+        "relay1": true,
+        "relay2": false,
+        "relay3": true,
+        "relay4": true
+      },
+      "timestamp": "2024-08-03T08:17:35.287Z",
+      "id": 12
+    },
+    {
+      "state": {
+        "relay1": false,
+        "relay2": true,
+        "relay3": false,
+        "relay4": true
+      },
+      "timestamp": "2024-08-04T15:32:45.625Z",
+      "id": 13
+    },
+    {
+      "relay1": false,
+      "relay2": false,
+      "relay3": false,
+      "relay4": false,
+      "timestamp": "2024-08-25T15:12:18.776Z",
+      "id": 14
+    }
+  ],
+  "sensors": [
+    {
+      "id": 1,
+      "temp": 95,
+      "humi": 61,
+      "timestamp": "2024-07-14T07:43:49.830Z"
+    },
+    {
+      "id": 2,
+      "temp": 93,
+      "humi": 60,
+      "timestamp": "2024-07-25T07:44:07.417Z"
+    },
+    {
+      "id": 3,
+      "temp": 90,
+      "humi": 66,
+      "timestamp": "2024-07-27T07:44:29.645Z"
+    },
+    {
+      "temp": 54,
+      "humi": 76,
+      "timestamp": "2024-08-03T12:14:13.880Z",
+      "id": 4
+    },
+    {
+      "temp": 54,
+      "humi": 76,
+      "timestamp": "2024-08-03T12:14:13.883Z",
+      "id": 5
+    },
+    {
+      "temp": 54,
+      "humi": 76,
+      "timestamp": "2024-08-03T12:14:41.637Z",
+      "id": 6
+    },
+    {
+      "temp": 54,
+      "humi": 76,
+      "timestamp": "2024-08-03T12:14:41.646Z",
+      "id": 7
+    },
+    {
+      "temp": 87,
+      "humi": 15,
+      "timestamp": "2024-08-03T12:15:36.748Z",
+      "id": 8
+    },
+    {
+      "temp": 87,
+      "humi": 15,
+      "timestamp": "2024-08-03T12:15:36.748Z",
+      "id": 9
+    },
+    {
+      "temp": 77,
+      "humi": 85,
+      "timestamp": "2024-08-03T12:16:16.191Z",
+      "id": 10
+    },
+    {
+      "temp": 77,
+      "humi": 85,
+      "timestamp": "2024-08-03T12:16:16.208Z",
+      "id": 11
+    },
+    {
+      "temp": 7,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T12:16:44.113Z",
+      "id": 12
+    },
+    {
+      "temp": 71.8,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T13:28:24.655Z",
+      "id": 13
+    },
+    {
+      "temp": 69.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T14:30:10.751Z",
+      "id": 14
+    },
+    {
+      "temp": 6.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T14:30:41.844Z",
+      "id": 15
+    },
+    {
+      "temp": 99.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T14:33:37.339Z",
+      "id": 16
+    },
+    {
+      "temp": 33.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T14:34:11.734Z",
+      "id": 17
+    },
+    {
+      "temp": 66.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T14:34:27.616Z",
+      "id": 18
+    },
+    {
+      "temp": 33.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T14:37:03.957Z",
+      "id": 19
+    },
+    {
+      "temp": 3.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T14:39:20.459Z",
+      "id": 20
+    },
+    {
+      "temp": 35.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T21:38:30.762Z",
+      "id": 21
+    },
+    {
+      "temp": 5.51,
+      "humi": 8.5,
+      "timestamp": "2024-08-03T21:38:49.055Z",
+      "id": 22
+    },
+    {
+      "temp": 31.6,
+      "humi": 99,
+      "timestamp": "2024-08-04T15:34:33.670Z",
+      "id": 23
+    },
+    {
+      "temp": 3.6,
+      "humi": 99,
+      "timestamp": "2024-08-04T15:35:52.994Z",
+      "id": 24
+    },
+    {
+      "temp": 40.2,
+      "humi": 99,
+      "timestamp": "2024-08-04T15:37:47.546Z",
+      "id": 25
+    },
+    {
+      "temp": 99.2,
+      "humi": 99,
+      "timestamp": "2024-08-04T15:38:20.333Z",
+      "id": 26
+    },
+    {
+      "temp": 66,
+      "humi": 99,
+      "timestamp": "2024-08-04T15:39:58.771Z",
+      "id": 27
+    },
+    {
+      "temp": 99,
+      "humi": 99,
+      "timestamp": "2024-08-04T15:40:11.362Z",
+      "id": 28
+    },
+    {
+      "temp": 33,
+      "humi": 99,
+      "timestamp": "2024-08-04T15:40:17.898Z",
+      "id": 29
+    },
+    {
+      "temp": 11,
+      "humi": 33,
+      "timestamp": "2024-08-06T02:30:22.394Z",
+      "id": 30
+    },
+    {
+      "temp": 22,
+      "humi": 33,
+      "timestamp": "2024-08-06T02:30:57.191Z",
+      "id": 31
+    },
+    {
+      "temp": 44,
+      "humi": 33,
+      "timestamp": "2024-08-06T02:31:52.912Z",
+      "id": 32
+    },
+    {
+      "temp": 55,
+      "humi": 33,
+      "timestamp": "2024-08-06T02:35:50.619Z",
+      "id": 33
+    },
+    {
+      "temp": 66,
+      "humi": 33,
+      "timestamp": "2024-08-06T02:36:09.421Z",
+      "id": 34
+    },
+    {
+      "temp": 77,
+      "humi": 44,
+      "timestamp": "2024-08-06T02:45:05.987Z",
+      "id": 35
+    },
+    {
+      "temp": 88,
+      "humi": 55,
+      "timestamp": "2024-08-06T02:45:39.828Z",
+      "id": 36
+    },
+    {
+      "temp": 99,
+      "humi": 66,
+      "timestamp": "2024-08-06T03:05:05.088Z",
+      "id": 37
+    }
+  ]
+}
