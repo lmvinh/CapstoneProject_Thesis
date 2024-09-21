@@ -19,7 +19,8 @@ enum HTMLGetRequest {
 	GET_logo,
 	GET_script,
 	GET_ajax_data,
-	GET_toggle_relay
+	GET_toggle_relay,
+	GET_relay_status
 };
 
 // ENVIII:
@@ -39,33 +40,46 @@ int n_average = 1;
 // const char* password = "12356789";
 // const char* ssid = "Amercland";
 // const char* password = "yenlam1507";
-const char* ssid = "ACLAB";
-const char* password = "ACLAB2023";
+/* const char* ssid = "ACLAB";
+const char* password = "ACLAB2023"; */
+const char* ssid = "Sebastian";
+const char* password = "khongcopassma";
+//const char* ssid = "Ho Van Hiep";
+//const char* password = "99999999";
 WiFiClient myclient;
 WiFiServer server(80);
 
+
 // GET request types
-#define GET_unknown 0
-#define GET_index_page 1
-#define GET_favicon 2
-#define GET_logo 3
-#define GET_script 4
+//#define GET_unknown 0
+//#define GET_index_page 1
+//#define GET_favicon 2
+//#define GET_logo 3
+//#define GET_script 4
+ 
 int html_get_request;
 
 #include "index.h"
 extern  UNIT_4RELAY relay;
 
-// IPAddress staticIP(192, 168, 1, 185); 
+//IPAddress staticIP(192, 168, 1, 15); 
 // IPAddress gateway(192, 168, 1, 1);    
 // IPAddress subnet(255, 255, 255, 0);   
 // IPAddress primaryDNS(192, 168, 1, 1); 
 // IPAddress secondaryDNS(0, 0, 0, 0);
 
-IPAddress staticIP(172, 28, 182, 185); 
-IPAddress gateway(172, 28, 182, 1);    
-IPAddress subnet(255, 255, 255, 0);   
-IPAddress primaryDNS(172, 28, 182, 1); 
+//IPAddress staticIP(172, 28, 182, 185); 
+//IPAddress gateway(172, 28, 182, 1);
+//IPAddress subnet(255, 255, 255, 0);
+//IPAddress primaryDNS(172, 28, 182, 1);
+//IPAddress secondaryDNS(0, 0, 0, 0);
+
+IPAddress staticIP(192, 168, 24, 190);
+IPAddress gateway(192,168,24,227); 
+IPAddress subnet(255, 255, 255, 0); 
+IPAddress primaryDNS(192,168,24,227);
 IPAddress secondaryDNS(0, 0, 0, 0);
+
 void turnRelay(uint8_t relayNum, int state);
 bool parseRelayRequest(String request, int &relayNum, int &state);
 void publishEnv(String value);
@@ -205,6 +219,8 @@ void loop() {
 							html_get_request = GET_ajax_data;
 						} else if (request.startsWith("GET /toggle")) {
 							html_get_request = GET_toggle_relay;
+						} else if (request.startsWith("GET /relay_status")) {
+							html_get_request = GET_relay_status;
 						} else {
 							html_get_request = GET_unknown;
 						}
@@ -250,6 +266,24 @@ void loop() {
 								client.println("Content-type:text/plain");
 								client.println();
 								client.println("OK");
+								break;
+							}
+							case GET_relay_status: {
+								client.println("HTTP/1.1 200 OK");
+								client.println("Content-type:application/json");
+								client.println();
+	
+	
+								bool relayStates[4];
+								for (int i = 0; i < 4; i++) {
+									relayStates[i] = relay.readRelay(i);  // Modify this line based on how your relays are read
+								}
+
+								client.printf("{\"relay1\":%s,\"relay2\":%s,\"relay3\":%s,\"relay4\":%s}\n",
+				  				relayStates[0] ? "true" : "false",
+				  				relayStates[1] ? "true" : "false",
+				  				relayStates[2] ? "true" : "false",
+				  				relayStates[3] ? "true" : "false");
 								break;
 							}
 							default:

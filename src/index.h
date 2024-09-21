@@ -167,9 +167,27 @@ const char index_html[] PROGMEM = R"rawliteral(
 			xhr.open("GET", `/toggle?relay=${relayNumber}&state=${isChecked ? 1 : 0}`, true);
 			xhr.send();
 		}
-
+		function updateRelayStatus() {
+		const xhr = new XMLHttpRequest();
+		xhr.open("GET", "/relay_status", true);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				try {
+					const relayData = JSON.parse(xhr.responseText);
+					document.getElementById("relay1").checked = relayData.relay1;
+					document.getElementById("relay2").checked = relayData.relay2;
+					document.getElementById("relay3").checked = relayData.relay3;
+					document.getElementById("relay4").checked = relayData.relay4;
+				} catch (error) {
+					console.error("Failed to parse relay data:", error);
+				}
+			}
+		};
+		xhr.send();
+	}
 		// Update sensor data every 3 seconds
 		setInterval(updateSensorData, 3000);
+		setInterval(updateRelayStatus, 3000);
 	</script>
 </body>
 </html>
