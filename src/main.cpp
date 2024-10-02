@@ -74,10 +74,10 @@ extern  UNIT_4RELAY relay;
 //IPAddress primaryDNS(172, 28, 182, 1);
 //IPAddress secondaryDNS(0, 0, 0, 0);
 
-IPAddress staticIP(192, 168, 24, 190);
-IPAddress gateway(192,168,24,227); 
+IPAddress staticIP(192, 168, 137, 190);
+IPAddress gateway(192,168,137,248); 
 IPAddress subnet(255, 255, 255, 0); 
-IPAddress primaryDNS(192,168,24,227);
+IPAddress primaryDNS(192,168,137,248);
 IPAddress secondaryDNS(0, 0, 0, 0);
 
 void turnRelay(uint8_t relayNum, int state);
