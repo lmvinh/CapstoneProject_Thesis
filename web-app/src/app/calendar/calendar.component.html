@@ -1,0 +1,31 @@
+
+<div >
+    <div class="header">
+        <app-header> </app-header>
+    </div>
+    <div class="main-container">
+      <div class="side-nav">
+        <app-side-nav></app-side-nav>
+      </div>
+      <div class="main">      
+        <mat-form-field style="margin: 15px;" >
+            <mat-label>Select Date</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" (dateChange)="fetchDataAndUpdateCharts()">
+            <mat-hint style="color: azure;">MM/DD/YYYY </mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker ></mat-datepicker>
+            <!--<button mat-raised-button color="primary" (click)="fetchDataAndUpdateCharts()">OK</button> -->
+          </mat-form-field>
+
+          <canvas id="ttt" style="width: 90%;height: 80%;margin: auto;"></canvas>
+          
+          
+          
+
+
+
+
+    </div>
+    </div>
+    
+</div>

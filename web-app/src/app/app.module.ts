@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DasboardComponent } from './dasboard/dasboard.component';
@@ -11,7 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-
+import { GaugeChartModule } from 'angular-gauge-chart'
 import { NgxGaugeModule } from 'ngx-gauge';
 import 'chartjs-adapter-moment'
 //import 'chartjs-adapter-luxon';
@@ -29,6 +29,12 @@ import { TempChartComponent } from './temp-chart/temp-chart.component';
 import { HumiChartComponent } from './chart-main/humi-chart.component';
 import { LogComponent } from './log/log.component';
 import { MqttBrokerComponent } from './mqtt-broker/mqtt-broker.component';
+import { CalendarComponent } from './calendar/calendar.component';
+
+import  { AngularFireModule  } from '@angular/fire/compat'
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { environment } from 'src/environments/environment';
+
 
 
 
@@ -46,10 +52,12 @@ import { MqttBrokerComponent } from './mqtt-broker/mqtt-broker.component';
     TempChartComponent,
     HumiChartComponent,
     LogComponent,
-    MqttBrokerComponent
+    MqttBrokerComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
@@ -59,12 +67,17 @@ import { MqttBrokerComponent } from './mqtt-broker/mqtt-broker.component';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    NgxGaugeModule
+    
+    NgxGaugeModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
+    
     
     
     
   ],
-  providers: [],
+  providers: [MatDatepickerModule,
+    MatNativeDateModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,7 +3,7 @@
     
     display: flex;
     align-items: space-between;
-    background-color: rgb(18, 101, 169);
+    background-color: rgb(1, 38, 69);
     
 
 .widget { 
@@ -15,7 +15,7 @@
       box-shadow: 5px 5px 5px #939393;
       &.left {
       width: 22%;
-      background-color: rgb(205, 243, 69);
+      background-color: rgb(128, 191, 255);
       justify-content: center;
       align-items: center;
       display: flex;
@@ -26,14 +26,22 @@
       }
       &.center{
       width: 22%;
-      background-color: rgb(106, 241, 210);
+      background-color: rgb(128, 191, 255);
       justify-content: center;
       align-items: center;
       display: flex;
       flex-direction: column;
       }
+      &.centerright{
+        width: 22%;
+        background-color: rgb(128, 191, 255);
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        }
       &.right {
-        width: 55%;
+        width: 33%;
         background-color: white;
         @media only screen and (max-width: 1600px) {
           width: 570px;
@@ -88,12 +96,12 @@
     text-align: center;
   }
   .header-logs{
-    
+    font-size: large;
     font-weight: bold;
   }
   
   .log-container-in {
-    background-color:rgb(178, 219, 42) ;
+    background-color:rgb(128, 191, 255) ;
     height:100%;
     overflow-y: auto;
     border: 1px solid #ccc;

@@ -33,12 +33,30 @@
     ></ngx-gauge>
     <div class="Header-gauge" style="font-weight: normal;">Last Modify:{{time}}</div>
     </div>
+    <div class="widget centerright" >
+      <div class="Header-gauge">Last Air condition Value:{{air| number:'2.2-2'}}°C</div>
+    
+      <ngx-gauge 
+      [type]="'arch'"
+      [value]="air"
+      [label]="'Air condition'"
+      [append]="'PPM'"
+      [thick]="15"
+      [min]="0"
+      [max]="1500"
+      [thresholds]="thresholdAirConfig"
+      [size]="200"
+    
+    ></ngx-gauge>
+    <div class="Header-gauge" style="font-weight: normal;">Last Modify:{{time}}</div>
+      
+    </div>
     <div class="widget right">
       
       <div class="log-container-in">
         <div class="header-logs" > Logs History</div>
         <div class="log-content">
-          <p *ngFor="let log of logs">{{ formatLog(log) }}</p>
+          <p *ngFor="let log of logs">{{ formatLog1(log) }}</p>
         </div>
       
         

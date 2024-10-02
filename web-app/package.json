@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "run-json": "json-server --host 10.0.129.187 --watch db1.json"
+    "run-json": "json-server --host 172.28.182.157 --watch db.json"
   },
   "private": true,
   "dependencies": {
@@ -16,14 +16,17 @@
     "@angular/common": "^15.2.0",
     "@angular/compiler": "^15.2.0",
     "@angular/core": "^15.2.0",
+    "@angular/fire": "^18.0.1",
     "@angular/forms": "^15.2.0",
     "@angular/material": "^15.2.9",
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
+    "angular-gauge-chart": "^0.7.2",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
     "chartjs-adapter-moment": "^1.0.1",
+    "firebase": "^10.13.2",
     "igniteui-angular-gauges": "^18.1.0",
     "jquery": "^3.7.1",
     "json-server": "^0.17.4",

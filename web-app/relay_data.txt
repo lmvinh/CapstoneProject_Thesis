@@ -1,0 +1,242 @@
+[
+      {
+            "relay1": false,
+            "relay2": true,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-16T03:54:00.933Z",
+            "id": 1655
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": false,
+            "relay4": true,
+            "timestamp": "2024-08-16T07:44:41.062Z",
+            "id": 1656
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-16T12:32:53.785Z",
+            "id": 1657
+      },
+      {
+            "relay1": true,
+            "relay2": true,
+            "relay3": true,
+            "relay4": true,
+            "timestamp": "2024-08-16T14:57:39.104Z",
+            "id": 1658
+      },
+      {
+            "relay1": false,
+            "relay2": true,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-16T19:23:52.490Z",
+            "id": 1659
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": true,
+            "relay4": false,
+            "timestamp": "2024-08-16T19:53:06.944Z",
+            "id": 1660
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": false,
+            "relay4": true,
+            "timestamp": "2024-08-16T20:39:47.378Z",
+            "id": 1661
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-16T22:03:37.777Z",
+            "id": 1662
+      },
+      {
+            "relay1": true,
+            "relay2": false,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-17T13:35:40.466Z",
+            "id": 1663
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": true,
+            "relay4": false,
+            "timestamp": "2024-08-17T14:52:32.723Z",
+            "id": 1664
+      },
+      {
+            "relay1": true,
+            "relay2": true,
+            "relay3": false,
+            "relay4": true,
+            "timestamp": "2024-08-17T17:18:26.513Z",
+            "id": 1665
+      },
+      {
+            "relay1": true,
+            "relay2": true,
+            "relay3": true,
+            "relay4": false,
+            "timestamp": "2024-08-18T00:47:17.370Z",
+            "id": 1666
+      },
+      {
+            "relay1": true,
+            "relay2": true,
+            "relay3": false,
+            "relay4": true,
+            "timestamp": "2024-08-18T08:08:04.247Z",
+            "id": 1667
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": false,
+            "relay4": true,
+            "timestamp": "2024-08-18T11:25:08.037Z",
+            "id": 1668
+      },
+      {
+            "relay1": false,
+            "relay2": true,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-18T12:54:47.722Z",
+            "id": 1669
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": true,
+            "relay4": true,
+            "timestamp": "2024-08-18T23:43:39.914Z",
+            "id": 1670
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-19T02:26:14.805Z",
+            "id": 1671
+      },
+      {
+            "relay1": true,
+            "relay2": true,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-19T02:51:57.624Z",
+            "id": 1672
+      },
+      {
+            "relay1": true,
+            "relay2": true,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-19T04:51:27.920Z",
+            "id": 1673
+      },
+      {
+            "relay1": false,
+            "relay2": true,
+            "relay3": true,
+            "relay4": true,
+            "timestamp": "2024-08-19T06:03:32.446Z",
+            "id": 1674
+      },
+      {
+            "relay1": false,
+            "relay2": true,
+            "relay3": true,
+            "relay4": false,
+            "timestamp": "2024-08-19T21:47:15.624Z",
+            "id": 1675
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": true,
+            "relay4": false,
+            "timestamp": "2024-08-20T07:45:44.933Z",
+            "id": 1676
+      },
+      {
+            "relay1": true,
+            "relay2": false,
+            "relay3": false,
+            "relay4": true,
+            "timestamp": "2024-08-20T18:43:11.049Z",
+            "id": 1677
+      },
+      {
+            "relay1": false,
+            "relay2": true,
+            "relay3": true,
+            "relay4": true,
+            "timestamp": "2024-08-20T22:00:02.097Z",
+            "id": 1678
+      },
+      {
+            "relay1": true,
+            "relay2": false,
+            "relay3": false,
+            "relay4": true,
+            "timestamp": "2024-08-20T22:21:21.171Z",
+            "id": 1679
+      },
+      {
+            "relay1": false,
+            "relay2": true,
+            "relay3": true,
+            "relay4": true,
+            "timestamp": "2024-08-20T23:56:12.918Z",
+            "id": 1680
+      },
+      {
+            "relay1": false,
+            "relay2": false,
+            "relay3": false,
+            "relay4": false,
+            "timestamp": "2024-08-21T09:26:31.762Z",
+            "id": 1681
+      },
+      {
+            "relay1": true,
+            "relay2": true,
+            "relay3": true,
+            "relay4": true,
+            "timestamp": "2024-08-23T05:58:54.858Z",
+            "id": 1682
+      },
+      {
+            "relay1": true,
+            "relay2": false,
+            "relay3": true,
+            "relay4": false,
+            "timestamp": "2024-08-23T21:35:50.807Z",
+            "id": 1683
+      },
+      {
+            "relay1": true,
+            "relay2": false,
+            "relay3": true,
+            "relay4": false,
+            "timestamp": "2024-08-23T22:13:19.441Z",
+            "id": 1684
+      }
+]
