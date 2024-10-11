@@ -35,6 +35,15 @@ void SetupNbiot() {
 		device.sendMsg("AT+CNACT?\r\n");
 		readstr = device.waitMsg(200);
 		log(readstr);
+		
+		device.sendMsg("AT+CPIN?\r\n");
+		readstr = device.waitMsg(200);
+		log(readstr);
+
+
+		device.sendMsg("AT+CGMM\r\n");
+		readstr = device.waitMsg(200);
+		log(readstr);
 
 		device.sendMsg("AT+SMCONF=\"URL\",\"mqttserver.tk\",\"1883\"\r\n");
 		readstr = device.waitMsg(1000);

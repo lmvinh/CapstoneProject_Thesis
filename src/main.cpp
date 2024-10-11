@@ -10,7 +10,7 @@
 #define LED_OK      0x001100
 #define LED_NETWORK 0x000011
 #define LED_MEASURE 0x111111
-unsigned long next_millis;
+//unsigned long next_millis;
 
 enum HTMLGetRequest {
 	GET_unknown = 0,
@@ -27,13 +27,14 @@ enum HTMLGetRequest {
 // SHT30:   temperature and humidity sensor  I2C: 0x44
 // QMP6988: absolute air pressure sensor     I2C: 0x70
 
-float qmp_Pressure = 0.0;
-float sht30_Temperature = 0.0;
-float sht30_Humidity = 0.0;
-int n_average = 1;
+//float qmp_Pressure = 0.0;
+//float sht30_Temperature = 0.0;
+//float sht30_Humidity = 0.0;
+//int n_average = 1;
 //String cur = "";
 // WiFi network configuration:
 #include "WiFi.h"
+
 
 // WiFi credentials
 // const char* ssid = "Misfit";
@@ -42,12 +43,12 @@ int n_average = 1;
 // const char* password = "yenlam1507";
 /* const char* ssid = "ACLAB";
 const char* password = "ACLAB2023"; */
-const char* ssid = "Sebastian";
-const char* password = "khongcopassma";
+/* const char* ssid = "Sebastian";
+const char* password = "khongcopassma"; */
 //const char* ssid = "Ho Van Hiep";
 //const char* password = "99999999";
 WiFiClient myclient;
-WiFiServer server(80);
+//WiFiServer server(80);
 
 
 // GET request types
@@ -57,9 +58,10 @@ WiFiServer server(80);
 //#define GET_logo 3
 //#define GET_script 4
  
-int html_get_request;
+//int html_get_request;
 
-#include "index.h"
+//#include "index.h"
+#include <WiFiType.h>
 extern  UNIT_4RELAY relay;
 
 //IPAddress staticIP(192, 168, 1, 15); 
@@ -74,11 +76,11 @@ extern  UNIT_4RELAY relay;
 //IPAddress primaryDNS(172, 28, 182, 1);
 //IPAddress secondaryDNS(0, 0, 0, 0);
 
-IPAddress staticIP(192, 168, 137, 190);
+/* IPAddress staticIP(192, 168, 137, 190);
 IPAddress gateway(192,168,137,248); 
 IPAddress subnet(255, 255, 255, 0); 
 IPAddress primaryDNS(192,168,137,248);
-IPAddress secondaryDNS(0, 0, 0, 0);
+IPAddress secondaryDNS(0, 0, 0, 0); */
 
 void turnRelay(uint8_t relayNum, int state);
 bool parseRelayRequest(String request, int &relayNum, int &state);
@@ -91,30 +93,30 @@ bool autoRelayRequest(const String& jsonString, const String& httpRequest, int &
 void publishRelayStates() ;
 void I2Cscan();
 boolean connect_Wifi();
-SHT4X sht4;
-BMP280 bmp;
-String messRev;
+//SHT4X sht4;
+//BMP280 bmp;
+//String messRev;
 int isMessageReive = 0;
 //String cur = "";
 
 void setup() {
 	M5.begin(true, false, true);
-	Wire.begin(25, 21);         
-	relay.begin(&Wire, 25, 21);
-	relay.Init(1);
+	//Wire.begin(25, 21);         
+	//relay.begin(&Wire, 25, 21);
+	//relay.Init(1);
 	delay(50); 
 	M5.dis.fillpix(LED_ERROR); 
 	Serial.println("M5ATOM ENV monitor");
 	Serial.println("v1.0 | 26.11.2021");
-	relay.relayAll(0);
-	I2Cscan();
-	WiFi.mode(WIFI_STA);
+	//relay.relayAll(0);
+	//I2Cscan();
+	//WiFi.mode(WIFI_STA);
 	WiFi.disconnect();
 	delay(1000);
-	connect_Wifi();
+	//connect_Wifi();
 	SetupNbiot();
 
-	server.begin();     
+	/* server.begin();     
 	if (!sht4.begin(&Wire, SHT40_I2C_ADDR_44, 25, 21, 400000U)) {
 		Serial.println("Couldn't find SHT4x");
 		while (1) delay(1);
@@ -133,7 +135,7 @@ void setup() {
 					BMP280::SAMPLING_X16,    
 					BMP280::FILTER_X16,      
 					BMP280::STANDBY_MS_500); 
-	next_millis = millis() + 5000;
+	next_millis = millis() + 5000; */
 	subscribeToTopic(MQTT_U_TOPIC_RELAY);
 
 
@@ -155,7 +157,7 @@ void relaycontrolfromString(String mess)
 }
 int flatReceive = 0;
 void loop() {
-	mainTainMqtt();
+	/* mainTainMqtt();
    // Serial.println(messRev);
 	if (messRev != NULL && messRev[2] == 'r') {
 		cur = messRev;  
@@ -303,11 +305,11 @@ void loop() {
 		}
 		client.stop();
 		Serial.println("Client Disconnected.");
-	}
+	} */
 }
 
 
-void I2Cscan() {
+/* void I2Cscan() {
 	byte error, address;
 	int nDevices;
 	Serial.println("Scanning...");
@@ -337,9 +339,9 @@ void I2Cscan() {
 	} else {
 		Serial.println("done\n");
 	}
-}
+} */
 
-boolean connect_Wifi() {
+/* boolean connect_Wifi() {
 	Serial.print("Connecting to Wi-Fi ");
 	WiFi.mode(WIFI_STA);
 	WiFi.config(staticIP, gateway, subnet, primaryDNS, secondaryDNS);
@@ -361,10 +363,10 @@ boolean connect_Wifi() {
 		M5.dis.fillpix(LED_ERROR);
 		return false;
 	}
-}
+} */
 
 
-void publishRelayStates() {
+/* void publishRelayStates() {
 	// Assume relay states are stored in a boolean array or similar
 	bool relayStates[4];  // Assuming you have 4 relays
 
@@ -381,8 +383,8 @@ void publishRelayStates() {
 
 	// Publish to the server
 	publishRelay(payload);
-}
-bool parseRelayRequest(String request, int &relayNum, int &state) {
+} */
+/* bool parseRelayRequest(String request, int &relayNum, int &state) {
 	int relayIndex = request.indexOf("relay=");
 	int stateIndex = request.indexOf("state=");
 
@@ -392,7 +394,7 @@ bool parseRelayRequest(String request, int &relayNum, int &state) {
 		return true;
 	}
 	return false;
-}
+} */
 bool autoRelayRequest(const String& jsonString, const String& httpRequest, int &relayNum, int &state) {
 	// Initialize relay states to -1, which indicates they are not set
 	int relayStates[4] = {-1, -1, -1, -1};
