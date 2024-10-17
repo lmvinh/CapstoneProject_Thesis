@@ -28,6 +28,6 @@ void sensorSetup() {
 
 void performPeriodicMeasurements() {
     if (sht4.update() && bmp.update()) {
-        // Do the measurement and publish the data
+        
     }
 }

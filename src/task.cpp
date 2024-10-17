@@ -11,6 +11,7 @@ int html_get_request;
 SHT4X sht4;
 BMP280 bmp;
 String messRev;
+String cur = "1";
 
 enum HTMLGetRequest {
 	GET_unknown = 0,

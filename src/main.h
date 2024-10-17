@@ -1,5 +1,5 @@
-/* #ifndef TEST_MAIN_H_
-#define TEST_MAIN_H_
+#ifndef MAIN_H_
+#define MAIN_H_
 #include <Arduino.h>
 #include <M5Atom.h>
 #include "setwifi.h"
@@ -14,4 +14,4 @@
 
 extern WiFiServer server;
 
-#endif */
+#endif

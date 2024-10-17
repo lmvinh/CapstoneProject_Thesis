@@ -1,5 +1,5 @@
 #include "String.h"
-String cur = "1";
+//String cur = "1";
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html lang="en">

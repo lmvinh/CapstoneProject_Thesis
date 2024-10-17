@@ -25,7 +25,9 @@ void wifiSetup() {
         Serial.println("\nWiFi connected.");
         Serial.print("IP address: ");
         Serial.println(WiFi.localIP());
+        M5.dis.fillpix(LED_OK);
     } else {
         Serial.println("\nWiFi connection failed!");
+        M5.dis.fillpix(LED_ERROR);
     }
 }
