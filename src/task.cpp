@@ -34,7 +34,7 @@ void envMeasureTask(void* pvParameters)
 		Serial.println(cur);
 	}    
 	relaycontrolfromString(cur);
-	vTaskDelay(1000);
+	delay(1000);
 	unsigned long current_millis = millis();
 	
 	if (current_millis >= next_millis) {
@@ -60,7 +60,8 @@ void envMeasureTask(void* pvParameters)
 			}
 		}
 	}
-
+	Serial.println("measure task");
+	vTaskDelay(3600);
 	}
 }
 void pubsubTask (void* pvParameters)

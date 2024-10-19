@@ -97,6 +97,7 @@ void subscribeToTopic(String topic) {
 	device.sendMsg("AT+SMSUB=\"" + topic + "\",1\r\n");
 	readstr = device.waitMsg(1000);
 	log(readstr);
+	Serial.println("subcribed");
 
 }
 

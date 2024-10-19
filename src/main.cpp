@@ -50,9 +50,10 @@ void setup() {
 
     // Init the relay, sensors, and other 
     relayControlSetup();
-     sensorSetup();
-    subscribeToTopic(MQTT_U_TOPIC_RELAY);
-    i2cScan();
+	i2cScan();
+    sensorSetup();
+    
+    
 
     M5.dis.fillpix(LED_ERROR);
     Serial.println("M5ATOM ENV monitor");
@@ -61,13 +62,14 @@ void setup() {
     wifiSetup();
     // Start nhubuiIOT
     SetupNbiot();
-
+	Serial.println("Setup complete");
+	subscribeToTopic(MQTT_U_TOPIC_RELAY);
     // Start the server
-    server.begin();
-
+    //server.begin();
+	
     // Start the tasks
     
-    Serial.println("Setup complete");
+    
     xTaskCreate(envMeasureTask, "", 4096, NULL, 1, NULL);
     xTaskCreate(pubsubTask, "", 4096, NULL, 1, NULL);
 }

@@ -6,6 +6,8 @@ void relayControlSetup() {
     relay.begin(&Wire, 25, 21);
     relay.Init(1);
     relay.relayAll(0);
+	Serial.println("Relay step");
+
 }
 
 void relaycontrolfromString(const String& mess) {    

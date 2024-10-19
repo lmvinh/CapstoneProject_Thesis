@@ -24,6 +24,7 @@ void sensorSetup() {
                     BMP280::SAMPLING_X16,    
                     BMP280::FILTER_X16,      
                     BMP280::STANDBY_MS_500); 
+    Serial.println("Sensor step");
 }
 
 void performPeriodicMeasurements() {
