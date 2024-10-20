@@ -2,10 +2,10 @@
 
 const char* ssid = "Sebastian";
 const char* password = "khongcopassma";
-IPAddress staticIP(192, 168, 137, 190);
-IPAddress gateway(192,168,137,248); 
+IPAddress staticIP(192, 168, 24, 190);
+IPAddress gateway(192,168,24,144); 
 IPAddress subnet(255, 255, 255, 0); 
-IPAddress primaryDNS(192,168,137,248);
+IPAddress primaryDNS(192,168,24,144);
 IPAddress secondaryDNS(0, 0, 0,0);
 
 void wifiSetup() {

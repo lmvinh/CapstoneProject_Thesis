@@ -58,4 +58,6 @@ void publishRelay(String payload);
 void mainTainMqtt(void);
 void publishEnv(String payload);
 void subscribeToTopic(String topic);
+void checkConnect();
+void reconnect();
 #endif

@@ -65,13 +65,13 @@ void setup() {
 	Serial.println("Setup complete");
 	subscribeToTopic(MQTT_U_TOPIC_RELAY);
     // Start the server
-    //server.begin();
+    server.begin();
 	
     // Start the tasks
     
     
     xTaskCreate(envMeasureTask, "", 4096, NULL, 1, NULL);
-    xTaskCreate(pubsubTask, "", 4096, NULL, 1, NULL);
+    xTaskCreate(pubsubTask, "", 4096, NULL, 2, NULL);
 }
 
 void loop() {
