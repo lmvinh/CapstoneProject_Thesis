@@ -26,10 +26,14 @@ information：https://docs.m5stack.com/en/atom/atom_dtu_nb
 #include <time.h>
 #include <sys/time.h>
 #include "string.h"
+
+
 #define MQTT_SERVER   "mqttserver.tk"
 #define MQTT_PORT     1883
-#define MQTT_USERNAME "innovation"
-#define MQTT_PASSWORD "Innovation_RgPQAZoA5N"
+/* #define MQTT_USERNAME "innovation"
+#define MQTT_PASSWORD "Innovation_RgPQAZoA5N" */
+#define MQTT_USERNAME "data-value"
+#define MQTT_PASSWORD "123456Abc"
 // #define MQTT_D_TOPIC  "TestAtom"
 #define MQTT_U_TOPIC_ENV "/innovation/airmonitoring/WSNs/ABC/env"  //  上传数据主题
 #define MQTT_U_TOPIC_RELAY "/innovation/airmonitoring/WSNs/ABC/relay"  //  上传数据主题

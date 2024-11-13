@@ -1,4 +1,5 @@
 #include "main.h"
+
 /*
 unsigned long next_millis1;
 SHT4X sht41;
@@ -46,7 +47,7 @@ void setup() {
     //**************************************
 
     M5.begin(true, false, true);
-    //Serial.begin(115200);
+    Serial.begin(115200);
 
     // Init the relay, sensors, and other 
     relayControlSetup();
@@ -63,17 +64,20 @@ void setup() {
     // Start nhubuiIOT
     SetupNbiot();
 	Serial.println("Setup complete");
-	subscribeToTopic(MQTT_U_TOPIC_RELAY);
+	//subscribeToTopic(MQTT_U_TOPIC_RELAY);
     // Start the server
     server.begin();
 	
     // Start the tasks
     
-    
+    setUpDualButton();
     xTaskCreate(envMeasureTask, "", 4096, NULL, 1, NULL);
     xTaskCreate(pubsubTask, "", 4096, NULL, 2, NULL);
+	xTaskCreate(buttonTask,"", 4096, NULL, 2, NULL);
 }
 
 void loop() {
-   
+   //ControlRelayManualByButton();
 }
+
+

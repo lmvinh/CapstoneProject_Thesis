@@ -9,7 +9,71 @@ void relayControlSetup() {
 	Serial.println("Relay step");
 
 }
+int mode = 0;int flag = 0;
+void ControlRelayManualByButton()
+{ 
+	// Button A press: Increment mode
+	if (buttonAisPress()) {
+		mode++;
+		if (mode > 5) mode = 0;  // Reset mode if it exceeds the max case (optional)	
+		M5.dis.fillpix(0x001100); // Display green for feedback
+		delay(100);               // Brief delay for visual feedback
+		M5.dis.clear();
+		Serial.println(mode);
+	}
 
+	// Button B press: Set flag to current mode and reset mode to 0
+	if (buttonBisPress()) {
+		flag = mode;
+		mode = 0;
+		M5.dis.fillpix(0x001100); // Display green for feedback
+		delay(100);               // Brief delay for visual feedback
+		M5.dis.clear();
+		Serial.println(flag);
+		
+	}
+	bool relayStates[4];  // Array to hold the state of each relay
+	// Retrieve the current state of each relay
+	for (int i = 0; i < 4; i++) {
+		relayStates[i] = relay.readRelay(i);  // Replace with actual relay state reading
+	}
+
+	// Control relays based on the flag value
+	switch (flag) {
+		case 0:
+			relay.relayAll(0);  // Turn off all relays
+			flag = -1;
+			publishRelayStates();
+			break;
+		case 1:
+			relay.relayWrite(0, !relayStates[0]);  // Toggle relay 0
+			flag = -1;
+			publishRelayStates();
+			break;
+		case 2:
+			relay.relayWrite(1, !relayStates[1]);  // Toggle relay 1
+			flag = -1;
+			publishRelayStates();
+			break;
+		case 3:
+			relay.relayWrite(2, !relayStates[2]);  // Toggle relay 2
+			flag = -1;
+			publishRelayStates();
+			break;
+		case 4:
+			relay.relayWrite(3, !relayStates[3]);  // Toggle relay 3
+			flag = -1;
+			publishRelayStates();
+			break;
+		case 5:
+			relay.relayAll(1);  // Turn on all relays
+			flag = -1;
+			publishRelayStates();
+			break;
+		default:
+			break;
+	}
+}
 void relaycontrolfromString(const String& mess) {    
     int startIndex1 = mess.indexOf("1") + 3;
 	int startIndex2 = mess.indexOf("2") + 3;

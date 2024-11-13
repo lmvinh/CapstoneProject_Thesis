@@ -18,6 +18,7 @@
 
 void envMeasureTask(void*);
 void pubsubTask(void*);
+void buttonTask(void*);
 
 
 #endif

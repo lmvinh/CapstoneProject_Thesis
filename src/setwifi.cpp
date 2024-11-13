@@ -1,13 +1,20 @@
 #include "setwifi.h"
 
 const char* ssid = "Sebastian";
-const char* password = "khongcopassma";
-IPAddress staticIP(192, 168, 24, 190);
-IPAddress gateway(192,168,24,144); 
+const char* password = "khongcopassma"; 
+IPAddress staticIP(192, 168, 137, 190);
+IPAddress gateway(192,168,137,224); 
 IPAddress subnet(255, 255, 255, 0); 
-IPAddress primaryDNS(192,168,24,144);
+IPAddress primaryDNS(192,168,137,224);
 IPAddress secondaryDNS(0, 0, 0,0);
 
+/* const char* ssid = "ACLAB";
+const char* password = "ACLAB2023";
+IPAddress staticIP(10, 28, 128, 190); 
+IPAddress gateway(10, 28, 128, 1);
+IPAddress subnet(255, 255, 254, 0);
+IPAddress primaryDNS(10, 28, 128, 1);
+IPAddress secondaryDNS(0, 0, 0, 0); */
 void wifiSetup() {
     Serial.print("Connecting to Wi-Fi ");
     WiFi.mode(WIFI_STA);

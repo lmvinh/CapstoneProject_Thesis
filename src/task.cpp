@@ -61,13 +61,23 @@ void envMeasureTask(void* pvParameters)
 		}
 	}
 	Serial.println("measure task");
-	vTaskDelay(3600);
+	
+	vTaskDelay(360000);
 	}
+}
+void buttonTask(void* pvParameters)
+{
+	while (1)
+	{
+		ControlRelayManualByButton();
+		
+	}
+	
 }
 void pubsubTask (void* pvParameters)
 {
 	while(1)
-	{
+	{	
 		WiFiClient client = server.available();
 		if (client) {
 			unsigned long timeout_millis = millis() + 5000;
@@ -182,6 +192,8 @@ void pubsubTask (void* pvParameters)
 		}
 		client.stop();
 		Serial.println("Client Disconnected.");
+		
 	}
+	
 	}
 }

@@ -11,7 +11,7 @@ void setUpDualButton()
 bool buttonAisPress() {
   cur_value1 = digitalRead(ButtonAPin);  // Read the current state of Button A
 
-  if (cur_value1 == HIGH && last_value1 == LOW) {  // Check if Button A is pressed
+  if (cur_value1 == 1 && last_value1 == 0) {  // Check if Button A is pressed
 	last_value1 = cur_value1;
 	M5.dis.fillpix(0x001100); 
 
@@ -25,7 +25,7 @@ bool buttonAisPress() {
 bool buttonBisPress() {
   cur_value2 = digitalRead(ButtonBPin);  // Read the current state of Button B
 
-  if (cur_value2 == HIGH && last_value2 == LOW) {  // Check if Button B is pressed
+  if (cur_value2 == 1 && last_value2 == 0) {  // Check if Button B is pressed
 	last_value2 = cur_value2;
 		M5.dis.fillpix(0x001100); 
 

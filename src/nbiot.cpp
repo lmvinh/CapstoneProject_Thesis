@@ -45,9 +45,19 @@ void SetupNbiot() {
 		readstr = device.waitMsg(200);
 		log(readstr);
 
-		device.sendMsg("AT+SMCONF=\"URL\",\"mqttserver.tk\",\"1883\"\r\n");
+		device.sendMsg("AT+CFSINIT\r\n");
 		readstr = device.waitMsg(1000);
 		log(readstr);
+
+		//device.sendMsg("AT+SMCONF=\"URL\",\"mqttserver.tk\",\"1883\"\r\n");
+		//device.sendMsg("AT+SMCONF=\"URL\",\"250b3bef1ac048d9bc134e6f8a995753.s1.eu.hivemq.cloud\",\"8883\"\r\n");
+		device.sendMsg("AT+SMCONF=\"URL\",\"broker.hivemq.com\",\"1883\"\r\n");
+		readstr = device.waitMsg(1000);
+		log(readstr);
+
+		/* device.sendMsg("AT+SMCONF =\"SSL\",\"1\"\r\n");
+		readstr = device.waitMsg(1000);
+		log(readstr); */
 		
 		device.sendMsg("AT+SMCONF=\"USERNAME\",\"" + String(MQTT_USERNAME) + "\"\r\n");
 		readstr = device.waitMsg(1000);
